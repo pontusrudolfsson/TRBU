@@ -947,7 +947,7 @@ function showPage(page, linkEl) {
 }
 
 // ===== REGISTRATION =====
-function submitRegistration() {
+async function submitRegistration() {
   const firstName = document.getElementById('firstName').value.trim();
   const lastName  = document.getElementById('lastName').value.trim();
   const email     = document.getElementById('email').value.trim();
@@ -955,6 +955,7 @@ function submitRegistration() {
   const dietary   = document.getElementById('dietary').value.trim();
   const message   = document.getElementById('message').value.trim();
   const alertEl   = document.getElementById('form-alert');
+  const submitBtn = document.querySelector('.submit-btn');
 
   alertEl.style.display = 'none';
   if (!firstName || !lastName || !email) {
@@ -968,35 +969,48 @@ function submitRegistration() {
     return;
   }
 
-  const reg = {
-    id: Date.now(),
-    date: new Date().toISOString(),
-    firstName, lastName, email, phone, dietary, message
-  };
-
+  // Save locally for admin panel
+  const reg = { id: Date.now(), date: new Date().toISOString(), firstName, lastName, email, phone, dietary, message };
   const regs = getData('registrations', []);
   regs.push(reg);
   setData('registrations', regs);
 
-  // Open mailto to configured email
-  const toEmail = getData('contactEmail', '');
-  const subject = encodeURIComponent(`Anmälan: ${firstName} ${lastName} — The Railway Backyard Ultra`);
-  const body = encodeURIComponent(
-`Ny anmälan till The Railway Backyard Ultra\n\n` +
-`Namn: ${firstName} ${lastName}\n` +
-`E-post: ${email}\n` +
-`Telefon: ${phone || '—'}\n` +
-`Specialkost: ${dietary || '—'}\n` +
-`Meddelande: ${message || '—'}\n\n` +
-`Anmälningsdatum: ${new Date().toLocaleString('sv-SE')}`
-  );
-  if (toEmail) {
-    window.open(`mailto:${toEmail}?subject=${subject}&body=${body}`, '_blank');
-  }
+  // Send via Formspree
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Skickar...';
 
-  document.getElementById('success-email').textContent = email;
-  document.getElementById('registration-form').style.display = 'none';
-  document.getElementById('form-success').style.display = 'block';
+  try {
+    const res = await fetch('https://formspree.io/f/mojpebbv', {
+      method: 'POST',
+      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        Namn: firstName + ' ' + lastName,
+        'E-post': email,
+        Telefon: phone || '—',
+        Specialkost: dietary || '—',
+        Meddelande: message || '—',
+        _replyto: email,
+        _subject: 'Ny anmälan: ' + firstName + ' ' + lastName + ' — The Railway Backyard Ultra'
+      })
+    });
+
+    if (res.ok) {
+      document.getElementById('success-email').textContent = email;
+      document.getElementById('registration-form').style.display = 'none';
+      document.getElementById('form-success').style.display = 'block';
+    } else {
+      const data = await res.json();
+      alertEl.textContent = data.error || 'Något gick fel. Försök igen eller kontakta oss direkt.';
+      alertEl.style.display = 'block';
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Skicka anmälan →';
+    }
+  } catch (err) {
+    alertEl.textContent = 'Kunde inte skicka anmälan. Kontrollera din internetanslutning och försök igen.';
+    alertEl.style.display = 'block';
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Skicka anmälan →';
+  }
 }
 
 function resetForm() {
