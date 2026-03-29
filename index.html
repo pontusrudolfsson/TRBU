@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Railway Backyard Ultra</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rail: #C8A84B;
+    --rust: #9B3B1A;
+    --steel: #4A5568;
+    --coal: #0F0F0F;
+    --soot: #1A1A1A;
+    --grime: #252525;
+    --ash: #888;
+    --pale: #CCC;
+    --white: #F5F0E8;
+    --danger: #C0392B;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--coal);
+    color: var(--pale);
+    min-height: 100vh;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(10,10,10,0.95);
+    border-bottom: 1px solid #2a2a2a;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2rem; height: 56px;
+    backdrop-filter: blur(8px);
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem; letter-spacing: 3px;
+    color: var(--rail);
+  }
+  .nav-links { display: flex; gap: 2rem; }
+  .nav-links a {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--ash); text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover, .nav-links a.active { color: var(--rail); }
+
+  /* PAGE SECTIONS */
+  .page { display: none; min-height: 100vh; padding-top: 56px; }
+  .page.active { display: block; }
+
+  /* HERO */
+  .hero {
+    position: relative; overflow: hidden;
+    min-height: 92vh;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 6rem 3rem 4rem;
+  }
+  .hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background:
+      repeating-linear-gradient(90deg, transparent, transparent 3px, rgba(200,168,75,0.03) 3px, rgba(200,168,75,0.03) 4px),
+      repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(255,255,255,0.02) 40px, rgba(255,255,255,0.02) 41px),
+      radial-gradient(ellipse at 60% 40%, rgba(155,59,26,0.15) 0%, transparent 65%),
+      var(--soot);
+  }
+  .hero-rail {
+    position: absolute; bottom: 0; left: 0; right: 0; height: 8px;
+    background: repeating-linear-gradient(90deg, var(--rail) 0, var(--rail) 40px, transparent 40px, transparent 60px);
+    opacity: 0.6;
+  }
+  .hero-content { position: relative; z-index: 1; max-width: 900px; }
+  .hero-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem; letter-spacing: 4px; text-transform: uppercase;
+    color: var(--rail); margin-bottom: 1.2rem;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .hero-tag::before {
+    content: ''; display: inline-block;
+    width: 40px; height: 1px; background: var(--rail);
+  }
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(4rem, 12vw, 9rem);
+    line-height: 0.9;
+    color: var(--white);
+    letter-spacing: 2px;
+    margin-bottom: 1.5rem;
+  }
+  h1 span { color: var(--rail); display: block; }
+  .hero-sub {
+    font-size: 1rem; font-weight: 300; color: var(--ash);
+    max-width: 520px; line-height: 1.7;
+    margin-bottom: 2.5rem;
+  }
+  .btn {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase;
+    padding: 14px 32px;
+    border: 1px solid var(--rail);
+    color: var(--rail);
+    background: transparent;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .btn:hover { background: var(--rail); color: var(--coal); }
+  .btn-primary { background: var(--rail); color: var(--coal); }
+  .btn-primary:hover { background: #a88a3b; border-color: #a88a3b; }
+
+  /* STATS STRIP */
+  .stats-strip {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    border-top: 1px solid #2a2a2a; border-bottom: 1px solid #2a2a2a;
+    background: var(--soot);
+  }
+  .stat-item {
+    padding: 2rem 1.5rem;
+    border-right: 1px solid #2a2a2a;
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.8rem; color: var(--rail);
+    line-height: 1;
+  }
+  .stat-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--ash); margin-top: 4px;
+  }
+
+  /* COURSE SECTION */
+  .section {
+    padding: 5rem 3rem;
+    max-width: 1100px; margin: 0 auto;
+  }
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3.5rem; color: var(--white);
+    letter-spacing: 2px; margin-bottom: 0.5rem;
+  }
+  .section-divider {
+    width: 60px; height: 2px;
+    background: var(--rail); margin-bottom: 2.5rem;
+  }
+  .course-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 3rem;
+    align-items: start;
+  }
+  .course-text p {
+    font-size: 0.95rem; line-height: 1.8; color: #AAA;
+    margin-bottom: 1.2rem;
+  }
+  .course-details {
+    background: var(--grime);
+    border: 1px solid #333; padding: 1.5rem;
+  }
+  .detail-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid #2a2a2a;
+    font-size: 0.85rem;
+  }
+  .detail-row:last-child { border-bottom: none; }
+  .detail-key {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--ash);
+  }
+  .detail-val { color: var(--pale); font-weight: 500; }
+
+  /* RULES */
+  .rules-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
+    margin-top: 2rem;
+  }
+  .rule-card {
+    background: var(--grime);
+    border: 1px solid #2a2a2a;
+    border-top: 2px solid var(--rail);
+    padding: 1.5rem;
+  }
+  .rule-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem; color: var(--rail); opacity: 0.4;
+    margin-bottom: 0.5rem;
+  }
+  .rule-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--pale); margin-bottom: 0.5rem;
+  }
+  .rule-text { font-size: 0.85rem; color: var(--ash); line-height: 1.6; }
+
+  /* REGISTRATION PAGE */
+  .reg-layout {
+    display: grid; grid-template-columns: 1fr 1.2fr; gap: 4rem;
+    max-width: 1100px; margin: 0 auto;
+    padding: 5rem 3rem;
+  }
+  .reg-info h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3.5rem; color: var(--white);
+    letter-spacing: 2px; line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  .reg-info p {
+    font-size: 0.9rem; color: var(--ash); line-height: 1.7; margin-bottom: 1rem;
+  }
+  .reg-fee {
+    margin-top: 2rem;
+    background: var(--grime); border: 1px solid #333; padding: 1.5rem;
+  }
+  .fee-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--ash); margin-bottom: 0.5rem;
+  }
+  .fee-amount {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem; color: var(--rail);
+  }
+  .form-box {
+    background: var(--soot);
+    border: 1px solid #2a2a2a;
+    padding: 2.5rem;
+  }
+  .form-box h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem; letter-spacing: 2px;
+    color: var(--white); margin-bottom: 1.5rem;
+  }
+  .form-group { margin-bottom: 1.25rem; }
+  .form-group label {
+    display: block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--ash); margin-bottom: 0.5rem;
+  }
+  .form-group input, .form-group select, .form-group textarea {
+    width: 100%; padding: 12px 14px;
+    background: var(--grime); border: 1px solid #333;
+    color: var(--pale); font-family: 'IBM Plex Sans', sans-serif; font-size: 0.9rem;
+    outline: none; transition: border-color 0.2s;
+    appearance: none;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    border-color: var(--rail);
+  }
+  .form-group select option { background: var(--grime); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .required { color: var(--rail); }
+  .submit-btn {
+    width: 100%; padding: 16px;
+    background: var(--rail); color: var(--coal);
+    border: none; cursor: pointer;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8rem; letter-spacing: 3px; text-transform: uppercase;
+    font-weight: 500;
+    transition: all 0.2s;
+    margin-top: 0.5rem;
+  }
+  .submit-btn:hover { background: #a88a3b; }
+  .submit-btn:disabled { background: #555; cursor: not-allowed; }
+  .form-notice {
+    font-size: 0.75rem; color: var(--ash);
+    margin-top: 1rem; line-height: 1.6;
+    border-top: 1px solid #2a2a2a; padding-top: 1rem;
+  }
+  .form-success {
+    display: none; text-align: center; padding: 2rem;
+  }
+  .form-success .check-icon {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: rgba(200,168,75,0.1); border: 1px solid var(--rail);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1rem; font-size: 1.5rem; color: var(--rail);
+  }
+  .form-success h4 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem; color: var(--white); margin-bottom: 0.5rem;
+  }
+  .form-success p { font-size: 0.85rem; color: var(--ash); }
+  .alert { padding: 0.75rem 1rem; margin-bottom: 1rem; font-size: 0.85rem; }
+  .alert-error { background: rgba(192,57,43,0.1); border: 1px solid var(--danger); color: #e74c3c; }
+  .alert-info { background: rgba(200,168,75,0.08); border: 1px solid rgba(200,168,75,0.3); color: var(--rail); }
+
+  /* ADMIN PAGE */
+  .admin-wrapper {
+    min-height: 100vh; padding-top: 56px;
+    background: var(--coal);
+  }
+  .admin-login {
+    display: flex; justify-content: center; align-items: center;
+    min-height: calc(100vh - 56px);
+    padding: 2rem;
+  }
+  .login-box {
+    width: 100%; max-width: 380px;
+    background: var(--soot); border: 1px solid #2a2a2a;
+    padding: 2.5rem;
+  }
+  .login-box h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem; letter-spacing: 2px;
+    color: var(--white); margin-bottom: 0.25rem;
+  }
+  .login-box p { font-size: 0.8rem; color: var(--ash); margin-bottom: 2rem; }
+  .admin-panel { display: none; max-width: 1100px; margin: 0 auto; padding: 3rem 2rem; }
+  .admin-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 2rem; padding-bottom: 1rem;
+    border-bottom: 1px solid #2a2a2a;
+  }
+  .admin-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem; letter-spacing: 2px; color: var(--white);
+  }
+  .admin-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 2rem; margin-bottom: 2.5rem; }
+  .admin-card {
+    background: var(--soot); border: 1px solid #2a2a2a;
+    padding: 1.5rem;
+  }
+  .admin-card h3 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--ash); margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem; border-bottom: 1px solid #2a2a2a;
+  }
+  .current-email {
+    font-size: 0.9rem; color: var(--rail); margin-bottom: 1rem;
+    font-family: 'IBM Plex Mono', monospace;
+    word-break: break-all;
+  }
+  .admin-form-group { margin-bottom: 1rem; }
+  .admin-form-group label {
+    display: block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--ash); margin-bottom: 0.4rem;
+  }
+  .admin-form-group input {
+    width: 100%; padding: 10px 12px;
+    background: var(--grime); border: 1px solid #333;
+    color: var(--pale); font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem;
+    outline: none; transition: border-color 0.2s;
+  }
+  .admin-form-group input:focus { border-color: var(--rail); }
+  .save-btn {
+    width: 100%; padding: 12px;
+    background: transparent; border: 1px solid var(--rail);
+    color: var(--rail); cursor: pointer;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase;
+    transition: all 0.2s; margin-top: 0.5rem;
+  }
+  .save-btn:hover { background: var(--rail); color: var(--coal); }
+  .registrations-table {
+    width: 100%; border-collapse: collapse; font-size: 0.82rem;
+  }
+  .registrations-table th {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--ash); text-align: left;
+    padding: 0.6rem 0.75rem; border-bottom: 1px solid #2a2a2a;
+  }
+  .registrations-table td {
+    padding: 0.75rem; border-bottom: 1px solid #1e1e1e;
+    color: var(--pale);
+  }
+  .registrations-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .badge {
+    display: inline-block; padding: 2px 8px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.6rem; letter-spacing: 1px; text-transform: uppercase;
+    background: rgba(200,168,75,0.1); color: var(--rail);
+    border: 1px solid rgba(200,168,75,0.3);
+  }
+  .empty-state {
+    text-align: center; padding: 3rem;
+    color: var(--ash); font-size: 0.85rem;
+  }
+  .delete-btn {
+    background: none; border: none; cursor: pointer;
+    color: #555; font-size: 0.75rem; font-family: 'IBM Plex Mono', monospace;
+    letter-spacing: 1px; text-transform: uppercase;
+    transition: color 0.2s; padding: 2px 6px;
+  }
+  .delete-btn:hover { color: var(--danger); }
+  .admin-stats-row {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .admin-stat {
+    background: var(--grime); border: 1px solid #2a2a2a; padding: 1rem;
+  }
+  .admin-stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem; color: var(--rail);
+  }
+  .admin-stat-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--ash);
+  }
+  .logout-btn {
+    background: none; border: 1px solid #333; color: var(--ash);
+    padding: 8px 16px; cursor: pointer;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase;
+    transition: all 0.2s;
+  }
+  .logout-btn:hover { border-color: var(--danger); color: var(--danger); }
+  .success-msg {
+    background: rgba(200,168,75,0.08); border: 1px solid rgba(200,168,75,0.3);
+    color: var(--rail); padding: 0.75rem 1rem;
+    font-size: 0.8rem; margin-bottom: 1rem; display: none;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--soot); border-top: 1px solid #1e1e1e;
+    padding: 2rem 3rem;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  footer p {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase;
+    color: #444;
+  }
+  .rail-divider {
+    height: 4px;
+    background: repeating-linear-gradient(90deg, var(--rail) 0, var(--rail) 20px, transparent 20px, transparent 30px);
+    opacity: 0.3;
+  }
+
+  @media (max-width: 768px) {
+    .course-grid, .reg-layout, .admin-grid { grid-template-columns: 1fr; }
+    .rules-grid { grid-template-columns: 1fr; }
+    .stats-strip { grid-template-columns: 1fr 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .admin-stats-row { grid-template-columns: 1fr; }
+    h1 { font-size: 3.5rem; }
+    .section { padding: 3rem 1.5rem; }
+    .reg-layout, .admin-panel { padding: 2rem 1.5rem; }
+  }
+</style>
+  </head>
+<body>
+
+<nav>
+  <div class="nav-logo">THE RAILWAY</div>
+  <div class="nav-links">
+    <a href="#" class="active" onclick="showPage('home', this)">Hem</a>
+    <a href="#" onclick="showPage('race', this)">Loppet</a>
+    <a href="#" onclick="showPage('register', this)">Anmälan</a>
+    <a href="#" onclick="showPage('admin', this)">Admin</a>
+  </div>
+</nav>
+
+<!-- HOME PAGE -->
+<div id="page-home" class="page active">
+  <div class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-rail"></div>
+    <div class="hero-content">
+      <div class="hero-tag">Backyard Ultra &mdash; Löplopp</div>
+      <h1>The Railway<span>Backyard Ultra</span></h1>
+      <p class="hero-sub">En lopp utan sluttid. Varje timme en runda. Sist att slutföra en runda vinner. Stål möter asfalt möter järnväg.</p>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap">
+        <a href="#" class="btn btn-primary" onclick="showPage('register', document.querySelectorAll('.nav-links a')[2])">Anmäl dig nu</a>
+        <a href="#" class="btn" onclick="showPage('race', document.querySelectorAll('.nav-links a')[1])">Om banan</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="stats-strip">
+    <div class="stat-item">
+      <div class="stat-num">6.706</div>
+      <div class="stat-label">km per loop</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">60</div>
+      <div class="stat-label">min per varv</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">∞</div>
+      <div class="stat-label">antal varv</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">1</div>
+      <div class="stat-label">vinnare</div>
+    </div>
+  </div>
+
+  <div class="rail-divider"></div>
+  <footer>
+    <p>&copy; 2025 The Railway Backyard Ultra</p>
+    <p>Backyard Ultra Format</p>
+  </footer>
+</div>
+
+<!-- RACE PAGE -->
+<div id="page-race" class="page">
+  <div class="section">
+    <div class="section-title">Banan</div>
+    <div class="section-divider"></div>
+    <!-- Course info + stats row -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start;margin-bottom:2.5rem">
+      <div class="course-text">
+        <p>The Railway Backyard Ultra utspelar sig längs en historisk järnvägssträcka. Varje loop är exakt 6,706 km — den klassiska Backyard Ultra-distansen. Du har 60 minuter på dig att slutföra varje varv och återvända till startlinjen.</p>
+        <p>Loppet fortsätter tills bara en löpare är kvar som klarat av ett varv. Den siste som slutför ett helt varv koronas som vinnare. Alla andra DNF.</p>
+        <p>Banan blandar asfalt, grus och industrilandskap. Järnvägsspår följer dig längs stora delar av rutten — hör tågen passera medan du kämpar mot klockan.</p>
+
+      </div>
+      <div>
+        <div class="course-details">
+          <div class="detail-row"><span class="detail-key">Distans per loop</span><span class="detail-val">6,706 km</span></div>
+          <div class="detail-row"><span class="detail-key">Höjdmeter upp</span><span class="detail-val">87 m</span></div>
+          <div class="detail-row"><span class="detail-key">Höjdmeter ned</span><span class="detail-val">86 m</span></div>
+          <div class="detail-row"><span class="detail-key">Lägsta punkt</span><span class="detail-val">182,6 m ö.h.</span></div>
+          <div class="detail-row"><span class="detail-key">Högsta punkt</span><span class="detail-val">198,0 m ö.h.</span></div>
+          <div class="detail-row"><span class="detail-key">Tidsgräns per loop</span><span class="detail-val">60 minuter</span></div>
+          <div class="detail-row"><span class="detail-key">Format</span><span class="detail-val">Backyard Ultra</span></div>
+          <div class="detail-row"><span class="detail-key">Underlag</span><span class="detail-val">Asfalt / Grus</span></div>
+          <div class="detail-row"><span class="detail-key">Datum</span><span class="detail-val">Meddelas</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Full-width map -->
+    <div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--ash);margin-bottom:0.75rem;display:flex;align-items:center;gap:8px">
+        <span style="display:inline-block;width:8px;height:8px;background:var(--rail);border-radius:50%"></span>
+        Interaktiv karta — The Railway Loop
+      </div>
+      <div id="map" style="width:100%;height:460px;border:1px solid #2a2a2a"></div>
+      <div style="margin-top:1rem;font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--ash);margin-bottom:0.5rem;display:flex;align-items:center;gap:8px">
+        <span style="display:inline-block;width:8px;height:8px;background:var(--rust);border-radius:50%"></span>
+        Höjdprofil
+      </div>
+      <div style="background:var(--grime);border:1px solid #2a2a2a;padding:1rem 1rem 0.5rem">
+        <canvas id="elevation-chart" style="width:100%;height:110px;display:block"></canvas>
+      </div>
+    </div>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js" onload="initRailwayMap()"></script>
+    <script>
+    var coords = [[57.443225,13.595225,186.2],[57.443542,13.595014,186.0],[57.443712,13.594887,186.2],[57.444038,13.594652,186.6],[57.444348,13.594447,187.2],[57.444832,13.594128,187.6],[57.445309,13.593794,188.0],[57.445756,13.593472,187.4],[57.446254,13.593111,187.6],[57.446729,13.592873,187.6],[57.446947,13.593417,187.0],[57.447129,13.59414,188.4],[57.447464,13.594042,188.2],[57.447769,13.593497,188.2],[57.447909,13.593105,188.0],[57.448207,13.592822,190.2],[57.448536,13.592561,192.2],[57.449025,13.592204,192.6],[57.449402,13.591971,193.4],[57.449855,13.591628,193.2],[57.450137,13.591427,191.6],[57.450519,13.591355,190.8],[57.45077,13.591211,192.4],[57.450954,13.591137,193.8],[57.45132,13.590998,194.2],[57.451671,13.590827,191.6],[57.451893,13.591256,190.0],[57.452017,13.591163,192.4],[57.452277,13.590956,192.2],[57.452589,13.591322,192.6],[57.452909,13.591132,193.4],[57.453045,13.590586,191.8],[57.4533,13.589727,191.8],[57.453641,13.589365,194.4],[57.454016,13.588961,195.4],[57.45444,13.588665,195.8],[57.454816,13.588571,192.6],[57.455302,13.588821,193.0],[57.455699,13.588649,193.6],[57.456042,13.588252,193.8],[57.456262,13.587644,197.0],[57.456571,13.587284,195.6],[57.456958,13.587034,193.8],[57.457343,13.586758,193.6],[57.457746,13.586601,193.8],[57.458202,13.586356,193.8],[57.458502,13.586005,194.0],[57.458939,13.585629,194.0],[57.459362,13.586114,192.8],[57.459435,13.587045,193.0],[57.459338,13.588087,192.8],[57.459229,13.588934,192.2],[57.459346,13.589774,192.6],[57.459583,13.590111,191.6],[57.459813,13.590093,192.0],[57.459897,13.590056,190.8],[57.460029,13.590073,190.0],[57.460155,13.5901,190.4],[57.460415,13.590076,189.6],[57.460543,13.589975,188.8],[57.460676,13.589969,189.2],[57.460765,13.590244,189.2],[57.460854,13.590535,189.4],[57.460931,13.590798,189.6],[57.461118,13.591035,189.0],[57.461209,13.591123,189.0],[57.461302,13.59133,189.0],[57.461561,13.59158,189.6],[57.461747,13.591892,190.2],[57.462015,13.592117,190.6],[57.462185,13.592466,191.6],[57.462324,13.592729,192.0],[57.462396,13.592915,190.6],[57.462433,13.593195,189.4],[57.4624,13.593551,189.4],[57.462351,13.593792,188.6],[57.462276,13.594177,188.6],[57.462095,13.594349,190.0],[57.461802,13.594382,189.2],[57.461572,13.594546,189.0],[57.461272,13.594792,188.8],[57.460865,13.594521,188.8],[57.460496,13.594356,186.6],[57.46015,13.593963,185.6],[57.459717,13.593309,186.2],[57.459384,13.59285,186.2],[57.459014,13.592714,187.4],[57.458709,13.592868,189.4],[57.458295,13.592385,189.0],[57.45778,13.592021,189.2],[57.457316,13.591672,189.6],[57.457068,13.591129,188.8],[57.456816,13.590627,187.4],[57.456558,13.590132,187.8],[57.456289,13.589605,188.8],[57.455903,13.589177,189.0],[57.455553,13.589126,189.2],[57.455106,13.589238,187.6],[57.454509,13.589295,186.4],[57.45417,13.589399,186.2],[57.45387,13.589372,189.8],[57.453468,13.589637,188.8],[57.453151,13.589974,186.0],[57.453152,13.590633,185.4],[57.453279,13.591066,188.6],[57.453492,13.591518,188.4],[57.453665,13.591723,187.6],[57.454034,13.592099,187.0],[57.454367,13.593034,188.0],[57.45448,13.593624,187.0],[57.454646,13.594142,187.4],[57.454993,13.594615,187.2],[57.455192,13.594855,185.2],[57.455686,13.595366,185.6],[57.456082,13.595627,187.8],[57.456365,13.594992,184.6],[57.456605,13.59502,183.4],[57.456362,13.595884,185.2],[57.456281,13.596547,185.6],[57.456024,13.597177,185.0],[57.455745,13.597282,186.8],[57.455457,13.597966,185.8],[57.455137,13.598369,185.6],[57.454731,13.597929,185.8],[57.454314,13.597554,185.8],[57.453983,13.598362,185.6],[57.453711,13.598086,185.8],[57.453914,13.597054,186.8],[57.454164,13.596228,187.0],[57.454046,13.595706,186.8],[57.453797,13.595586,186.0],[57.45362,13.595513,186.0],[57.453362,13.595343,185.2],[57.453164,13.59526,184.8],[57.453049,13.5952,184.6],[57.452886,13.595096,184.4],[57.45267,13.595028,184.0],[57.452495,13.595459,183.6],[57.452269,13.595534,183.4],[57.452125,13.595434,183.4],[57.451942,13.595323,183.2],[57.451674,13.595165,182.8],[57.45148,13.595034,182.8],[57.451268,13.594911,183.0],[57.451012,13.594849,183.6],[57.450821,13.594708,185.2],[57.45065,13.594489,186.4],[57.450423,13.594173,185.0],[57.450258,13.5944,185.0],[57.450124,13.594674,185.0],[57.449953,13.594995,185.0],[57.449773,13.595297,184.8],[57.449585,13.595336,185.0],[57.449386,13.595176,185.0],[57.448994,13.595134,185.2],[57.448661,13.596187,185.6],[57.448258,13.595916,186.0],[57.447816,13.595264,185.4],[57.447545,13.594692,184.2],[57.447112,13.594068,184.0],[57.446957,13.593521,183.0],[57.44674,13.592932,182.8],[57.446357,13.593031,184.2],[57.445804,13.593462,184.4],[57.445458,13.593683,185.2],[57.44492,13.594052,186.2],[57.444383,13.594431,187.0],[57.443956,13.594743,187.4],[57.443529,13.594975,187.4],[57.443224,13.595154,187.8]];
+    var cumDist = [0,37.4,57.8,96.7,133.3,190.4,247.1,300.4,359.8,414.5,455.1,502.9,540.6,587.6,615.8,653.0,692.8,751.2,795.3,849.7,883.3,926.0,955.2,976.2,1017.7,1058.0,1093.7,1108.5,1140.0,1181.0,1218.4,1254.3,1313.0,1356.7,1404.9,1455.3,1497.4,1553.5,1598.8,1643.8,1687.6,1728.2,1773.7,1819.6,1865.4,1918.2,1957.6,2011.1,2066.4,2122.7,2185.9,2238.0,2289.9,2323.1,2348.7,2358.3,2373.0,2387.1,2416.0,2431.5,2446.3,2465.5,2485.5,2503.4,2528.6,2540.0,2556.1,2588.6,2616.4,2649.1,2677.3,2699.3,2713.0,2730.3,2751.9,2767.3,2791.8,2814.4,2847.0,2874.4,2910.9,2958.9,3001.1,3046.2,3108.3,3154.4,3196.3,3231.4,3285.8,3347.1,3402.7,3445.3,3486.4,3527.6,3571.1,3621.1,3660.1,3710.2,3776.7,3814.9,3848.3,3895.7,3936.3,3975.8,4005.3,4041.2,4064.0,4110.8,4177.9,4215.4,4251.4,4299.3,4325.7,4388.5,4435.2,4484.6,4511.3,4569.6,4610.3,4657.6,4689.2,4741.2,4784.2,4836.4,4887.9,4948.7,4983.2,5048.9,5105.6,5139.4,5168.1,5188.2,5218.6,5241.2,5254.5,5273.7,5298.0,5330.3,5355.9,5372.9,5394.4,5425.6,5448.6,5473.3,5502.0,5524.8,5547.9,5579.4,5602.3,5624.4,5651.5,5678.4,5699.4,5723.6,5767.2,5840.3,5887.9,5950.7,5996.3,6057.2,6094.2,6136.9,6179.9,6246.6,6287.3,6351.0,6414.9,6465.9,6515.4,6550.97];
+
+    var railwayMap, hoverDot;
+
+    function initRailwayMap() {
+      var latlngs = coords.map(function(c) { return [c[0], c[1]]; });
+
+      railwayMap = L.map('map', { zoomControl: true });
+
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        maxZoom: 19
+      }).addTo(railwayMap);
+
+      var poly = L.polyline(latlngs, { color: '#C8A84B', weight: 4, opacity: 0.9 }).addTo(railwayMap);
+      railwayMap.fitBounds(poly.getBounds(), { padding: [24, 24] });
+
+      var startIcon = L.divIcon({
+        html: '<div style="width:14px;height:14px;background:#C8A84B;border-radius:50%;border:2.5px solid #111;box-shadow:0 0 8px rgba(200,168,75,0.8)"></div>',
+        iconSize: [14, 14], iconAnchor: [7, 7], className: ''
+      });
+      L.marker([coords[0][0], coords[0][1]], { icon: startIcon })
+        .addTo(railwayMap)
+        .bindPopup('<b>Start / Mål</b>');
+
+      hoverDot = L.circleMarker([coords[0][0], coords[0][1]], {
+        radius: 6, color: '#C8A84B', fillColor: '#111', fillOpacity: 1, weight: 2, opacity: 0
+      }).addTo(railwayMap);
+
+      drawElevation(null);
+    }
+
+    function drawElevation(hi) {
+      var canvas = document.getElementById('elevation-chart');
+      if (!canvas) return;
+      var ctx = canvas.getContext('2d');
+      var dpr = window.devicePixelRatio || 1;
+      var cw = canvas.offsetWidth, ch = canvas.offsetHeight;
+      canvas.width = cw * dpr; canvas.height = ch * dpr;
+      ctx.scale(dpr, dpr);
+
+      var eles = coords.map(function(c) { return c[2]; });
+      var minE = Math.min.apply(null, eles) - 1;
+      var maxE = Math.max.apply(null, eles) + 1;
+      var maxD = cumDist[cumDist.length - 1];
+      var pad = { l: 36, r: 8, t: 6, b: 20 };
+      var pw = cw - pad.l - pad.r, ph = ch - pad.t - pad.b;
+
+      ctx.fillStyle = '#252525'; ctx.fillRect(0, 0, cw, ch);
+
+      ctx.strokeStyle = 'rgba(255,255,255,0.04)'; ctx.lineWidth = 1;
+      for (var g = 0; g <= 3; g++) {
+        var gy = pad.t + ph * g / 3;
+        ctx.beginPath(); ctx.moveTo(pad.l, gy); ctx.lineTo(cw - pad.r, gy); ctx.stroke();
+      }
+
+      var grad = ctx.createLinearGradient(0, pad.t, 0, pad.t + ph);
+      grad.addColorStop(0, 'rgba(155,59,26,0.55)');
+      grad.addColorStop(1, 'rgba(155,59,26,0.03)');
+      ctx.fillStyle = grad;
+      ctx.beginPath(); ctx.moveTo(pad.l, pad.t + ph);
+      for (var i = 0; i < coords.length; i++) {
+        var x = pad.l + pw * cumDist[i] / maxD;
+        var y = pad.t + ph * (1 - (eles[i] - minE) / (maxE - minE));
+        i === 0 ? ctx.lineTo(x, y) : ctx.lineTo(x, y);
+      }
+      ctx.lineTo(pad.l + pw, pad.t + ph); ctx.closePath(); ctx.fill();
+
+      ctx.strokeStyle = '#C8A84B'; ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      for (var i = 0; i < coords.length; i++) {
+        var x = pad.l + pw * cumDist[i] / maxD;
+        var y = pad.t + ph * (1 - (eles[i] - minE) / (maxE - minE));
+        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      ctx.fillStyle = '#555'; ctx.font = '9px IBM Plex Mono,monospace'; ctx.textAlign = 'right';
+      for (var g = 0; g <= 3; g++) {
+        var val = maxE - (maxE - minE) * g / 3;
+        ctx.fillText(Math.round(val) + 'm', pad.l - 3, pad.t + ph * g / 3 + 3);
+      }
+      ctx.textAlign = 'center';
+      [0,1,2,3,4,5,6].forEach(function(km) {
+        var x = pad.l + pw * (km * 1000) / maxD;
+        ctx.fillStyle = '#444';
+        ctx.beginPath(); ctx.moveTo(x, pad.t + ph); ctx.lineTo(x, pad.t + ph + 3); ctx.stroke();
+        ctx.fillStyle = '#555'; ctx.fillText(km + 'km', x, ch - 3);
+      });
+
+      if (hi !== null) {
+        var hx = pad.l + pw * cumDist[hi] / maxD;
+        var hy = pad.t + ph * (1 - (eles[hi] - minE) / (maxE - minE));
+        ctx.strokeStyle = 'rgba(200,168,75,0.4)'; ctx.lineWidth = 1;
+        ctx.setLineDash([3, 3]);
+        ctx.beginPath(); ctx.moveTo(hx, pad.t); ctx.lineTo(hx, pad.t + ph); ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = '#C8A84B';
+        ctx.beginPath(); ctx.arc(hx, hy, 3, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = 'rgba(15,15,15,0.85)';
+        var lx = hx + 6; if (lx + 64 > cw - pad.r) lx = hx - 70;
+        ctx.fillRect(lx, hy - 10, 64, 16);
+        ctx.fillStyle = '#C8A84B'; ctx.font = '9px IBM Plex Mono,monospace'; ctx.textAlign = 'left';
+        ctx.fillText(Math.round(eles[hi]) + 'm  ' + Math.round(cumDist[hi] / 100) / 10 + 'km', lx + 3, hy + 2);
+      }
+    }
+
+    window.addEventListener('load', function() {
+      var elCanvas = document.getElementById('elevation-chart');
+      if (!elCanvas) return;
+      drawElevation(null);
+      window.addEventListener('resize', function() { drawElevation(null); });
+
+      elCanvas.addEventListener('mousemove', function(e) {
+        var rect = elCanvas.getBoundingClientRect();
+        var frac = Math.max(0, Math.min(1, (e.clientX - rect.left - 36) / (elCanvas.offsetWidth - 44)));
+        var target = frac * cumDist[cumDist.length - 1];
+        var best = 0;
+        for (var i = 0; i < cumDist.length; i++) {
+          if (Math.abs(cumDist[i] - target) < Math.abs(cumDist[best] - target)) best = i;
+        }
+        drawElevation(best);
+        if (hoverDot) {
+          hoverDot.setLatLng([coords[best][0], coords[best][1]]);
+          hoverDot.setStyle({ opacity: 1, fillOpacity: 1 });
+        }
+      });
+
+      elCanvas.addEventListener('mouseleave', function() {
+        drawElevation(null);
+        if (hoverDot) hoverDot.setStyle({ opacity: 0, fillOpacity: 0 });
+      });
+    });
+    </script>
+
+    <div style="margin-top:4rem">
+      <div class="section-title">Regler</div>
+      <div class="section-divider"></div>
+      <div class="rules-grid">
+        <div class="rule-card">
+          <div class="rule-num">01</div>
+          <div class="rule-title">Starta i tid</div>
+          <div class="rule-text">Varje nytt varv startar exakt på heltimmen. Missar du starten är du diskvalificerad.</div>
+        </div>
+        <div class="rule-card">
+          <div class="rule-num">02</div>
+          <div class="rule-title">Hela banan</div>
+          <div class="rule-text">Du måste springa hela den utstakade banan. Genvägar eller avvikelser leder till diskvalificering.</div>
+        </div>
+        <div class="rule-card">
+          <div class="rule-num">03</div>
+          <div class="rule-title">Återgå i tid</div>
+          <div class="rule-text">Du måste vara tillbaka vid startlinjen innan nästa varv börjar — med tid att vila och förbereda.</div>
+        </div>
+        <div class="rule-card">
+          <div class="rule-num">04</div>
+          <div class="rule-title">Ge upp frivilligt</div>
+          <div class="rule-text">Vill du ge upp kan du göra det vid ett varvsslut. Meddela tävlingsledningen innan nästa start.</div>
+        </div>
+        <div class="rule-card">
+          <div class="rule-num">05</div>
+          <div class="rule-title">Assistans</div>
+          <div class="rule-text">Personlig assistans är tillåten vid startplatsen mellan varven. Pacers är ej tillåtna.</div>
+        </div>
+        <div class="rule-card">
+          <div class="rule-num">06</div>
+          <div class="rule-title">Fair play</div>
+          <div class="rule-text">Respekt för medlöpare, funktionärer och naturen är obligatorisk. Sportsmanship gäller alltid.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="rail-divider"></div>
+  <footer>
+    <p>&copy; 2025 The Railway Backyard Ultra</p>
+    <p>Backyard Ultra Format</p>
+  </footer>
+</div>
+
+<!-- REGISTER PAGE -->
+<div id="page-register" class="page">
+  <div class="reg-layout">
+    <div class="reg-info">
+      <h2>Anmälan</h2>
+      <div class="section-divider"></div>
+      <p>Fyll i formuläret för att anmäla dig till The Railway Backyard Ultra. Din anmälan skickas direkt till tävlingsledningen som bekräftar din plats via e-post.</p>
+      <p>Antalet platser är begränsat. Anmälan behandlas i turordning.</p>
+      <div class="reg-fee">
+        <div class="fee-label">Startavgift</div>
+        <div class="fee-amount">Meddelas</div>
+        <div style="font-size:0.75rem;color:var(--ash);margin-top:0.5rem">Betalningsinformation skickas i bekräftelsemejl</div>
+      </div>
+      <div style="margin-top:1.5rem;padding:1.25rem;background:var(--grime);border:1px solid #2a2a2a">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--ash);margin-bottom:0.75rem">Vad händer sen?</div>
+        <div style="font-size:0.82rem;color:#999;line-height:1.8">
+          1. Vi bekräftar din anmälan via e-post<br>
+          2. Du får betalningsinformation<br>
+          3. Ytterligare info om datum och plats skickas ut
+        </div>
+      </div>
+    </div>
+
+    <div class="form-box">
+      <h3>Registreringsformulär</h3>
+      <div id="form-alert" class="alert alert-error" style="display:none"></div>
+      <div id="registration-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Förnamn <span class="required">*</span></label>
+            <input type="text" id="firstName" placeholder="Förnamn" required>
+          </div>
+          <div class="form-group">
+            <label>Efternamn <span class="required">*</span></label>
+            <input type="text" id="lastName" placeholder="Efternamn" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>E-postadress <span class="required">*</span></label>
+          <input type="email" id="email" placeholder="din@email.se" required>
+        </div>
+        <div class="form-group">
+          <label>Telefonnummer</label>
+          <input type="tel" id="phone" placeholder="+46 70 000 00 00">
+        </div>
+        <div class="form-group">
+          <label>Specialkost / Allergier</label>
+          <input type="text" id="dietary" placeholder="T.ex. glutenfri, vegetarian, nötallegi...">
+        </div>
+        <div class="form-group">
+          <label>Övrigt / Meddelande</label>
+          <textarea id="message" rows="3" style="resize:vertical;background:var(--grime);border:1px solid #333;color:var(--pale);font-family:'IBM Plex Sans',sans-serif;font-size:0.9rem;width:100%;padding:12px 14px;outline:none" placeholder="Frågor eller övrigt..."></textarea>
+        </div>
+        <button class="submit-btn" onclick="submitRegistration()">Skicka anmälan &rarr;</button>
+        <p class="form-notice">Din information skickas direkt till tävlingsledningen. Inga uppgifter delas med tredje part. Fälten markerade med <span class="required">*</span> är obligatoriska.</p>
+      </div>
+
+      <div id="form-success" class="form-success">
+        <div class="check-icon">✓</div>
+        <h4>Anmälan skickad!</h4>
+        <p>Tack för din anmälan till The Railway Backyard Ultra. Vi återkommer med bekräftelse på <strong id="success-email"></strong> så snart som möjligt.</p>
+        <button class="btn" style="margin-top:1.5rem" onclick="resetForm()">Ny anmälan</button>
+      </div>
+    </div>
+  </div>
+  <div class="rail-divider"></div>
+  <footer>
+    <p>&copy; 2025 The Railway Backyard Ultra</p>
+    <p>Backyard Ultra Format</p>
+  </footer>
+</div>
+
+<!-- ADMIN PAGE -->
+<div id="page-admin" class="page">
+  <div id="admin-login" class="admin-login">
+    <div class="login-box">
+      <h2>Admin</h2>
+      <p>Logga in för att hantera loppet</p>
+      <div id="login-error" class="alert alert-error" style="display:none">Fel lösenord. Försök igen.</div>
+      <div class="admin-form-group">
+        <label>Lösenord</label>
+        <input type="password" id="admin-password" placeholder="••••••••" onkeydown="if(event.key==='Enter')adminLogin()">
+      </div>
+      <button class="save-btn" onclick="adminLogin()">Logga in</button>
+      <p style="font-size:0.7rem;color:var(--ash);margin-top:1rem;font-family:'IBM Plex Mono',monospace">Standardlösenord: <span style="color:var(--rail)">railway2025</span><br>Ändra i inställningar nedan.</p>
+    </div>
+  </div>
+
+  <div id="admin-panel" class="admin-panel" style="display:none">
+    <div class="admin-header">
+      <div class="admin-title">Kontrollpanel</div>
+      <button class="logout-btn" onclick="adminLogout()">Logga ut</button>
+    </div>
+
+    <div class="admin-stats-row">
+      <div class="admin-stat">
+        <div class="admin-stat-num" id="stat-total">0</div>
+        <div class="admin-stat-label">Totalt anmälda</div>
+      </div>
+      <div class="admin-stat">
+        <div class="admin-stat-num" id="stat-today">0</div>
+        <div class="admin-stat-label">Nya idag</div>
+      </div>
+      <div class="admin-stat">
+        <div class="admin-stat-num" id="stat-dietary">0</div>
+        <div class="admin-stat-label">Med specialkost</div>
+      </div>
+    </div>
+
+    <div class="admin-grid">
+      <div>
+        <!-- Email settings -->
+        <div class="admin-card" style="margin-bottom:1.5rem">
+          <h3>Anmälningsmejl</h3>
+          <div style="font-size:0.75rem;color:var(--ash);margin-bottom:0.5rem">Anmälningar skickas till:</div>
+          <div class="current-email" id="current-email-display">Inte inställt</div>
+          <div id="email-success" class="success-msg">E-post sparad!</div>
+          <div class="admin-form-group">
+            <label>Ny e-postadress</label>
+            <input type="email" id="new-email-input" placeholder="din@email.se">
+          </div>
+          <button class="save-btn" onclick="saveEmail()">Spara e-post</button>
+        </div>
+
+        <!-- Password settings -->
+        <div class="admin-card">
+          <h3>Ändra lösenord</h3>
+          <div id="pw-success" class="success-msg">Lösenord uppdaterat!</div>
+          <div class="admin-form-group">
+            <label>Nuvarande lösenord</label>
+            <input type="password" id="old-pw" placeholder="••••••••">
+          </div>
+          <div class="admin-form-group">
+            <label>Nytt lösenord</label>
+            <input type="password" id="new-pw" placeholder="••••••••">
+          </div>
+          <div class="admin-form-group">
+            <label>Bekräfta nytt lösenord</label>
+            <input type="password" id="confirm-pw" placeholder="••••••••">
+          </div>
+          <div id="pw-error" class="alert alert-error" style="display:none;margin-top:0.5rem"></div>
+          <button class="save-btn" onclick="changePassword()">Uppdatera lösenord</button>
+        </div>
+      </div>
+
+      <!-- Registrations -->
+      <div class="admin-card">
+        <h3 style="display:flex;justify-content:space-between;align-items:center">
+          <span>Anmälningar</span>
+          <button onclick="exportCSV()" style="background:none;border:1px solid #333;color:var(--ash);padding:4px 12px;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:0.6rem;letter-spacing:1px;text-transform:uppercase;transition:all 0.2s" onmouseover="this.style.borderColor='var(--rail)';this.style.color='var(--rail)'" onmouseout="this.style.borderColor='#333';this.style.color='var(--ash)'">Exportera CSV</button>
+        </h3>
+        <div id="registrations-container">
+          <div class="empty-state">Inga anmälningar ännu.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== STATE =====
+const DEFAULT_PW = 'railway2025';
+
+function getData(key, def) {
+  try { return JSON.parse(localStorage.getItem(key)) ?? def; } catch { return def; }
+}
+function setData(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
+
+// ===== NAVIGATION =====
+function showPage(page, linkEl) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  if (linkEl) linkEl.classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ===== REGISTRATION =====
+function submitRegistration() {
+  const firstName = document.getElementById('firstName').value.trim();
+  const lastName  = document.getElementById('lastName').value.trim();
+  const email     = document.getElementById('email').value.trim();
+  const phone     = document.getElementById('phone').value.trim();
+  const dietary   = document.getElementById('dietary').value.trim();
+  const message   = document.getElementById('message').value.trim();
+  const alertEl   = document.getElementById('form-alert');
+
+  alertEl.style.display = 'none';
+  if (!firstName || !lastName || !email) {
+    alertEl.textContent = 'Fyll i alla obligatoriska fält (markerade med *).';
+    alertEl.style.display = 'block';
+    return;
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    alertEl.textContent = 'Ange en giltig e-postadress.';
+    alertEl.style.display = 'block';
+    return;
+  }
+
+  const reg = {
+    id: Date.now(),
+    date: new Date().toISOString(),
+    firstName, lastName, email, phone, dietary, message
+  };
+
+  const regs = getData('registrations', []);
+  regs.push(reg);
+  setData('registrations', regs);
+
+  // Open mailto to configured email
+  const toEmail = getData('contactEmail', '');
+  const subject = encodeURIComponent(`Anmälan: ${firstName} ${lastName} — The Railway Backyard Ultra`);
+  const body = encodeURIComponent(
+`Ny anmälan till The Railway Backyard Ultra\n\n` +
+`Namn: ${firstName} ${lastName}\n` +
+`E-post: ${email}\n` +
+`Telefon: ${phone || '—'}\n` +
+`Specialkost: ${dietary || '—'}\n` +
+`Meddelande: ${message || '—'}\n\n` +
+`Anmälningsdatum: ${new Date().toLocaleString('sv-SE')}`
+  );
+  if (toEmail) {
+    window.open(`mailto:${toEmail}?subject=${subject}&body=${body}`, '_blank');
+  }
+
+  document.getElementById('success-email').textContent = email;
+  document.getElementById('registration-form').style.display = 'none';
+  document.getElementById('form-success').style.display = 'block';
+}
+
+function resetForm() {
+  document.getElementById('registration-form').style.display = 'block';
+  document.getElementById('form-success').style.display = 'none';
+  document.getElementById('form-alert').style.display = 'none';
+  ['firstName','lastName','email','phone','dietary','message'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+}
+
+// ===== ADMIN =====
+function adminLogin() {
+  const pw = document.getElementById('admin-password').value;
+  const storedPw = getData('adminPassword', DEFAULT_PW);
+  if (pw === storedPw) {
+    document.getElementById('admin-login').style.display = 'none';
+    document.getElementById('admin-panel').style.display = 'block';
+    loadAdminPanel();
+  } else {
+    document.getElementById('login-error').style.display = 'block';
+    document.getElementById('admin-password').value = '';
+  }
+}
+
+function adminLogout() {
+  document.getElementById('admin-panel').style.display = 'none';
+  document.getElementById('admin-login').style.display = 'flex';
+  document.getElementById('admin-password').value = '';
+  document.getElementById('login-error').style.display = 'none';
+}
+
+function loadAdminPanel() {
+  const email = getData('contactEmail', '');
+  document.getElementById('current-email-display').textContent = email || 'Inte inställt';
+  document.getElementById('new-email-input').value = email;
+  loadRegistrations();
+}
+
+function saveEmail() {
+  const val = document.getElementById('new-email-input').value.trim();
+  if (!val || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) {
+    alert('Ange en giltig e-postadress.');
+    return;
+  }
+  setData('contactEmail', val);
+  document.getElementById('current-email-display').textContent = val;
+  const s = document.getElementById('email-success');
+  s.style.display = 'block';
+  setTimeout(() => s.style.display = 'none', 2500);
+}
+</script>
+</body>
+</html>
