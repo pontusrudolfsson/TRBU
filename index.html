@@ -1101,7 +1101,7 @@ function renderCards() {
     const timeStr = new Date(r.date).toLocaleTimeString('sv-SE', {hour:'2-digit',minute:'2-digit'});
     const num = String(regs.indexOf(r) + 1).padStart(3, '0');
     const dnf = r.dnf ? ' style="opacity:0.45"' : '';
-    const dnfBadge = r.dnf ? '<span style="font-family:\'IBM Plex Mono\',monospace;font-size:0.6rem;letter-spacing:1px;background:rgba(192,57,43,0.15);color:#e74c3c;border:1px solid rgba(192,57,43,0.3);padding:2px 7px;margin-left:8px">AVHOPPAD</span>' : '';
+    const dnfBadge = r.dnf ? `<span style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;letter-spacing:1px;background:rgba(192,57,43,0.15);color:#e74c3c;border:1px solid rgba(192,57,43,0.3);padding:2px 7px;margin-left:8px">AVHOPPAD</span>` : '';
     return `
     <div${dnf} style="background:var(--soot);border:1px solid ${r.dnf ? 'rgba(192,57,43,0.3)' : '#2a2a2a'};overflow:hidden">
       <div style="background:var(--grime);border-bottom:1px solid #2a2a2a;padding:0.75rem 1rem;display:flex;align-items:center;justify-content:space-between">
@@ -1213,16 +1213,16 @@ function exportExcel() {
     new Date(r.date).toLocaleString('sv-SE')
   ]);
 
-  const headerXml = headers.map(h => \`<Cell><Data ss:Type="String">\${esc(h)}</Data></Cell>\`).join('');
+  const headerXml = headers.map(h => `<Cell><Data ss:Type="String">${esc(h)}</Data></Cell>`).join('');
   const rowsXml = rows.map(row =>
     '<Row>' + row.map(v =>
       typeof v === 'number'
-        ? \`<Cell><Data ss:Type="Number">\${v}</Data></Cell>\`
-        : \`<Cell><Data ss:Type="String">\${esc(v)}</Data></Cell>\`
+        ? `<Cell><Data ss:Type="Number">${v}</Data></Cell>`
+        : `<Cell><Data ss:Type="String">${esc(v)}</Data></Cell>`
     ).join('') + '</Row>'
   ).join('\n');
 
-  const xml = \`<?xml version="1.0" encoding="UTF-8"?>
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <?mso-application progid="Excel.Sheet"?>
 <Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
   xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">
@@ -1242,11 +1242,11 @@ function exportExcel() {
       <Column ss:Width="150"/>
       <Column ss:Width="200"/>
       <Column ss:Width="140"/>
-      <Row>\${headerXml}</Row>
-      \${rowsXml}
+      <Row>${headerXml}</Row>
+      ${rowsXml}
     </Table>
   </Worksheet>
-</Workbook>\`;
+</Workbook>`;
 
   const blob = new Blob(['\uFEFF' + xml], {type: 'application/vnd.ms-excel;charset=utf-8'});
   const a = document.createElement('a');
