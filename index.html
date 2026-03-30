@@ -706,6 +706,10 @@
         <div class="admin-stat-num" id="stat-dietary">0</div>
         <div class="admin-stat-label">Med specialkost</div>
       </div>
+      <div class="admin-stat">
+        <div class="admin-stat-num" id="stat-paid" style="color:#4caf50">0</div>
+        <div class="admin-stat-label">Har betalt</div>
+      </div>
     </div>
 
     <div class="admin-grid">
@@ -761,6 +765,41 @@
       </div>
     </div>
     <div id="cards-container" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem"></div>
+  </div>
+
+  <!-- BUDGET -->
+  <div style="max-width:1100px;margin:0 auto;padding:0 2rem 4rem">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid #2a2a2a">
+      <div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:2px;color:var(--white)">Budget</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--ash);margin-top:2px">Startavgift: 300 kr / deltagare</div>
+      </div>
+      <button onclick="openAddCost()" style="background:var(--rail);border:1px solid var(--rail);color:var(--coal);padding:8px 16px;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;font-weight:500" onmouseover="this.style.background='#a88a3b'" onmouseout="this.style.background='var(--rail)'">+ Lägg till kostnad</button>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem">
+      <div class="admin-stat" style="border-top:2px solid #4caf50">
+        <div class="admin-stat-num" id="budget-income" style="color:#4caf50">0 kr</div>
+        <div class="admin-stat-label">Intäkter (betalt)</div>
+      </div>
+      <div class="admin-stat" style="border-top:2px solid var(--rail)">
+        <div class="admin-stat-num" id="budget-expected" style="color:var(--rail)">0 kr</div>
+        <div class="admin-stat-label">Förväntat (alla)</div>
+      </div>
+      <div class="admin-stat" style="border-top:2px solid var(--rust)">
+        <div class="admin-stat-num" id="budget-costs">0 kr</div>
+        <div class="admin-stat-label">Kostnader</div>
+      </div>
+      <div class="admin-stat" id="budget-result-card">
+        <div class="admin-stat-num" id="budget-result">0 kr</div>
+        <div class="admin-stat-label">Resultat (betalt)</div>
+      </div>
+    </div>
+    <div style="background:var(--soot);border:1px solid #2a2a2a">
+      <div style="padding:1rem 1.25rem;border-bottom:1px solid #2a2a2a;font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--ash)">Kostnader</div>
+      <div id="costs-list">
+        <div style="padding:2rem;text-align:center;color:var(--ash);font-size:0.85rem">Inga kostnader tillagda.</div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1079,7 +1118,9 @@ function updateStats() {
   document.getElementById('stat-total').textContent = regs.length;
   document.getElementById('stat-today').textContent = regs.filter(r => new Date(r.date).toDateString() === today).length;
   document.getElementById('stat-dietary').textContent = regs.filter(r => r.dietary).length;
+  document.getElementById('stat-paid').textContent = regs.filter(r => r.paid).length;
   document.getElementById('db-count').textContent = regs.length + ' deltagare';
+  updateBudget();
 }
 
 function renderCards() {
@@ -1130,8 +1171,14 @@ function renderCards() {
           <span style="color:var(--pale)">${r.dietary || '—'}</span>
           ${r.message ? `<span style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:1px;text-transform:uppercase;color:var(--ash);padding-top:1px">Meddelande</span><span style="color:var(--pale)">${r.message}</span>` : ''}
         </div>
-        <div style="margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid #1e1e1e;font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:#444">
-          Anmäld ${dateStr} kl ${timeStr}
+        <div style="margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid #1e1e1e;display:flex;align-items:center;justify-content:space-between">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:#444">Anmäld ${dateStr} kl ${timeStr}</span>
+          <label style="display:flex;align-items:center;gap:7px;cursor:pointer;user-select:none" onclick="event.stopPropagation()">
+            <div onclick="togglePaid(${r.id}, event)" style="width:20px;height:20px;border:1.5px solid ${r.paid ? '#3a7d44' : '#444'};background:${r.paid ? 'rgba(58,125,68,0.15)' : 'transparent'};border-radius:3px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.15s;flex-shrink:0">
+              ${r.paid ? '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#4caf50" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>' : ''}
+            </div>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:0.62rem;color:${r.paid ? '#4caf50' : '#555'};letter-spacing:1px;text-transform:uppercase">${r.paid ? 'Betalt' : 'Ej betalt'}</span>
+          </label>
         </div>
       </div>
     </div>`;
@@ -1312,6 +1359,113 @@ function saveAddParticipant() {
 document.addEventListener('click', function(e) {
   if (e.target.id === 'add-participant-overlay') closeAddParticipant();
 });
+
+// ===== PAYMENT TOGGLE =====
+function togglePaid(id, event) {
+  event.stopPropagation();
+  const regs = getData('registrations', []);
+  const idx = regs.findIndex(r => r.id === id);
+  if (idx === -1) return;
+  regs[idx].paid = !regs[idx].paid;
+  setData('registrations', regs);
+  renderCards();
+  updateStats();
+  updateBudget();
+}
+
+// ===== BUDGET =====
+const ENTRY_FEE = 300;
+
+function updateBudget() {
+  const regs = getData('registrations', []);
+  const costs = getData('costs', []);
+
+  const paid = regs.filter(r => r.paid && !r.dnf).length;
+  const total = regs.filter(r => !r.dnf).length;
+  const income = paid * ENTRY_FEE;
+  const expected = total * ENTRY_FEE;
+  const totalCosts = costs.reduce((sum, c) => sum + Number(c.amount), 0);
+  const result = income - totalCosts;
+
+  document.getElementById('budget-income').textContent = income.toLocaleString('sv-SE') + ' kr';
+  document.getElementById('budget-expected').textContent = expected.toLocaleString('sv-SE') + ' kr';
+  document.getElementById('budget-costs').textContent = totalCosts.toLocaleString('sv-SE') + ' kr';
+  document.getElementById('budget-result').textContent = (result >= 0 ? '+' : '') + result.toLocaleString('sv-SE') + ' kr';
+
+  const resultCard = document.getElementById('budget-result-card');
+  const resultEl = document.getElementById('budget-result');
+  if (result >= 0) {
+    resultCard.style.borderTop = '2px solid #4caf50';
+    resultEl.style.color = '#4caf50';
+  } else {
+    resultCard.style.borderTop = '2px solid var(--danger)';
+    resultEl.style.color = '#e74c3c';
+  }
+
+  renderCosts(costs);
+}
+
+function renderCosts(costs) {
+  const el = document.getElementById('costs-list');
+  if (!el) return;
+  if (!costs || costs.length === 0) {
+    el.innerHTML = '<div style="padding:2rem;text-align:center;color:var(--ash);font-size:0.85rem">Inga kostnader tillagda.</div>';
+    return;
+  }
+  el.innerHTML = costs.map((cost, i) => `
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:0.85rem 1.25rem;border-bottom:1px solid #1e1e1e">
+      <div style="display:flex;align-items:center;gap:12px">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;letter-spacing:1px;text-transform:uppercase;background:var(--grime);color:var(--ash);padding:2px 8px;border:1px solid #2a2a2a">${cost.category || 'Övrigt'}</span>
+        <span style="font-size:0.88rem;color:var(--pale)">${cost.desc}</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:0.85rem;color:var(--rust);font-weight:500">-${Number(cost.amount).toLocaleString('sv-SE')} kr</span>
+        <button onclick="deleteCost(${i})" style="background:none;border:none;cursor:pointer;color:#444;font-family:'IBM Plex Mono',monospace;font-size:0.6rem;letter-spacing:1px;text-transform:uppercase;transition:color 0.2s;padding:2px 4px" onmouseover="this.style.color='var(--danger)'" onmouseout="this.style.color='#444'">Ta bort</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function deleteCost(idx) {
+  if (!confirm('Ta bort denna kostnad?')) return;
+  const costs = getData('costs', []);
+  costs.splice(idx, 1);
+  setData('costs', costs);
+  updateBudget();
+}
+
+function openAddCost() {
+  document.getElementById('cost-desc').value = '';
+  document.getElementById('cost-amount').value = '';
+  document.getElementById('cost-category').value = 'Övrigt';
+  document.getElementById('add-cost-error').style.display = 'none';
+  document.getElementById('add-cost-overlay').style.display = 'flex';
+}
+
+function closeAddCost() {
+  document.getElementById('add-cost-overlay').style.display = 'none';
+}
+
+function saveAddCost() {
+  const desc = document.getElementById('cost-desc').value.trim();
+  const amount = parseFloat(document.getElementById('cost-amount').value);
+  const category = document.getElementById('cost-category').value;
+  const errEl = document.getElementById('add-cost-error');
+
+  errEl.style.display = 'none';
+  if (!desc) { errEl.textContent = 'Ange en beskrivning.'; errEl.style.display = 'block'; return; }
+  if (isNaN(amount) || amount < 0) { errEl.textContent = 'Ange ett giltigt belopp.'; errEl.style.display = 'block'; return; }
+
+  const costs = getData('costs', []);
+  costs.push({ desc, amount, category, date: new Date().toISOString() });
+  setData('costs', costs);
+  closeAddCost();
+  updateBudget();
+}
+
+document.addEventListener('click', function(e) {
+  if (e.target.id === 'add-cost-overlay') closeAddCost();
+});
 </script>
 
 <!-- EDIT MODAL -->
@@ -1404,6 +1558,43 @@ document.addEventListener('click', function(e) {
       <div style="display:flex;gap:0.75rem">
         <button onclick="saveAddParticipant()" style="flex:1;padding:12px;background:var(--rail);color:var(--coal);border:none;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:0.72rem;letter-spacing:2px;text-transform:uppercase;font-weight:500;transition:background 0.2s">Lägg till deltagare</button>
         <button onclick="closeAddParticipant()" style="padding:12px 20px;background:none;border:1px solid #333;color:var(--ash);cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:0.72rem;letter-spacing:2px;text-transform:uppercase;transition:all 0.2s">Avbryt</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADD COST MODAL -->
+<div id="add-cost-overlay" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.75);align-items:center;justify-content:center;padding:1rem">
+  <div style="background:var(--soot);border:1px solid #333;width:100%;max-width:420px">
+    <div style="background:var(--grime);border-bottom:1px solid #2a2a2a;padding:1rem 1.25rem;display:flex;justify-content:space-between;align-items:center">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:2px;color:var(--white)">Lägg till kostnad</div>
+      <button onclick="closeAddCost()" style="background:none;border:none;color:var(--ash);cursor:pointer;font-size:1.2rem;padding:0 4px;line-height:1">&times;</button>
+    </div>
+    <div style="padding:1.5rem">
+      <div id="add-cost-error" class="alert alert-error" style="display:none;margin-bottom:1rem"></div>
+      <div style="margin-bottom:1rem">
+        <label style="display:block;font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--ash);margin-bottom:0.4rem">Beskrivning <span style="color:var(--rail)">*</span></label>
+        <input id="cost-desc" type="text" placeholder="T.ex. Medaljer, Timing, Mat..." style="width:100%;padding:10px 12px;background:var(--grime);border:1px solid #333;color:var(--pale);font-family:'IBM Plex Sans',sans-serif;font-size:0.85rem;outline:none">
+      </div>
+      <div style="margin-bottom:1rem">
+        <label style="display:block;font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--ash);margin-bottom:0.4rem">Belopp (kr) <span style="color:var(--rail)">*</span></label>
+        <input id="cost-amount" type="number" min="0" placeholder="0" style="width:100%;padding:10px 12px;background:var(--grime);border:1px solid #333;color:var(--pale);font-family:'IBM Plex Sans',sans-serif;font-size:0.85rem;outline:none">
+      </div>
+      <div style="margin-bottom:1.5rem">
+        <label style="display:block;font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--ash);margin-bottom:0.4rem">Kategori</label>
+        <select id="cost-category" style="width:100%;padding:10px 12px;background:var(--grime);border:1px solid #333;color:var(--pale);font-family:'IBM Plex Sans',sans-serif;font-size:0.85rem;outline:none;appearance:none">
+          <option value="Övrigt">Övrigt</option>
+          <option value="Tävling">Tävling</option>
+          <option value="Mat & dryck">Mat &amp; dryck</option>
+          <option value="Utrustning">Utrustning</option>
+          <option value="Marknadsföring">Marknadsföring</option>
+          <option value="Lokalhyra">Lokalhyra</option>
+          <option value="Transport">Transport</option>
+        </select>
+      </div>
+      <div style="display:flex;gap:0.75rem">
+        <button onclick="saveAddCost()" style="flex:1;padding:12px;background:var(--rail);color:var(--coal);border:none;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:0.72rem;letter-spacing:2px;text-transform:uppercase;font-weight:500">Lägg till</button>
+        <button onclick="closeAddCost()" style="padding:12px 20px;background:none;border:1px solid #333;color:var(--ash);cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:0.72rem;letter-spacing:2px;text-transform:uppercase">Avbryt</button>
       </div>
     </div>
   </div>
