@@ -553,175 +553,7 @@
         <canvas id="elevation-chart" style="width:100%;height:110px;display:block"></canvas>
       </div>
     </div>
-    <script>
-    // ── GPX data ──────────────────────────────────────────────────────────────
-    var RBU_COORDS = [[57.443225,13.595225,186.2],[57.443542,13.595014,186.0],[57.443712,13.594887,186.2],[57.444038,13.594652,186.6],[57.444348,13.594447,187.2],[57.444832,13.594128,187.6],[57.445309,13.593794,188.0],[57.445756,13.593472,187.4],[57.446254,13.593111,187.6],[57.446729,13.592873,187.6],[57.446947,13.593417,187.0],[57.447129,13.59414,188.4],[57.447464,13.594042,188.2],[57.447769,13.593497,188.2],[57.447909,13.593105,188.0],[57.448207,13.592822,190.2],[57.448536,13.592561,192.2],[57.449025,13.592204,192.6],[57.449402,13.591971,193.4],[57.449855,13.591628,193.2],[57.450137,13.591427,191.6],[57.450519,13.591355,190.8],[57.45077,13.591211,192.4],[57.450954,13.591137,193.8],[57.45132,13.590998,194.2],[57.451671,13.590827,191.6],[57.451893,13.591256,190.0],[57.452017,13.591163,192.4],[57.452277,13.590956,192.2],[57.452589,13.591322,192.6],[57.452909,13.591132,193.4],[57.453045,13.590586,191.8],[57.4533,13.589727,191.8],[57.453641,13.589365,194.4],[57.454016,13.588961,195.4],[57.45444,13.588665,195.8],[57.454816,13.588571,192.6],[57.455302,13.588821,193.0],[57.455699,13.588649,193.6],[57.456042,13.588252,193.8],[57.456262,13.587644,197.0],[57.456571,13.587284,195.6],[57.456958,13.587034,193.8],[57.457343,13.586758,193.6],[57.457746,13.586601,193.8],[57.458202,13.586356,193.8],[57.458502,13.586005,194.0],[57.458939,13.585629,194.0],[57.459362,13.586114,192.8],[57.459435,13.587045,193.0],[57.459338,13.588087,192.8],[57.459229,13.588934,192.2],[57.459346,13.589774,192.6],[57.459583,13.590111,191.6],[57.459813,13.590093,192.0],[57.459897,13.590056,190.8],[57.460029,13.590073,190.0],[57.460155,13.5901,190.4],[57.460415,13.590076,189.6],[57.460543,13.589975,188.8],[57.460676,13.589969,189.2],[57.460765,13.590244,189.2],[57.460854,13.590535,189.4],[57.460931,13.590798,189.6],[57.461118,13.591035,189.0],[57.461209,13.591123,189.0],[57.461302,13.59133,189.0],[57.461561,13.59158,189.6],[57.461747,13.591892,190.2],[57.462015,13.592117,190.6],[57.462185,13.592466,191.6],[57.462324,13.592729,192.0],[57.462396,13.592915,190.6],[57.462433,13.593195,189.4],[57.4624,13.593551,189.4],[57.462351,13.593792,188.6],[57.462276,13.594177,188.6],[57.462095,13.594349,190.0],[57.461802,13.594382,189.2],[57.461572,13.594546,189.0],[57.461272,13.594792,188.8],[57.460865,13.594521,188.8],[57.460496,13.594356,186.6],[57.46015,13.593963,185.6],[57.459717,13.593309,186.2],[57.459384,13.59285,186.2],[57.459014,13.592714,187.4],[57.458709,13.592868,189.4],[57.458295,13.592385,189.0],[57.45778,13.592021,189.2],[57.457316,13.591672,189.6],[57.457068,13.591129,188.8],[57.456816,13.590627,187.4],[57.456558,13.590132,187.8],[57.456289,13.589605,188.8],[57.455903,13.589177,189.0],[57.455553,13.589126,189.2],[57.455106,13.589238,187.6],[57.454509,13.589295,186.4],[57.45417,13.589399,186.2],[57.45387,13.589372,189.8],[57.453468,13.589637,188.8],[57.453151,13.589974,186.0],[57.453152,13.590633,185.4],[57.453279,13.591066,188.6],[57.453492,13.591518,188.4],[57.453665,13.591723,187.6],[57.454034,13.592099,187.0],[57.454367,13.593034,188.0],[57.45448,13.593624,187.0],[57.454646,13.594142,187.4],[57.454993,13.594615,187.2],[57.455192,13.594855,185.2],[57.455686,13.595366,185.6],[57.456082,13.595627,187.8],[57.456365,13.594992,184.6],[57.456605,13.59502,183.4],[57.456362,13.595884,185.2],[57.456281,13.596547,185.6],[57.456024,13.597177,185.0],[57.455745,13.597282,186.8],[57.455457,13.597966,185.8],[57.455137,13.598369,185.6],[57.454731,13.597929,185.8],[57.454314,13.597554,185.8],[57.453983,13.598362,185.6],[57.453711,13.598086,185.8],[57.453914,13.597054,186.8],[57.454164,13.596228,187.0],[57.454046,13.595706,186.8],[57.453797,13.595586,186.0],[57.45362,13.595513,186.0],[57.453362,13.595343,185.2],[57.453164,13.59526,184.8],[57.453049,13.5952,184.6],[57.452886,13.595096,184.4],[57.45267,13.595028,184.0],[57.452495,13.595459,183.6],[57.452269,13.595534,183.4],[57.452125,13.595434,183.4],[57.451942,13.595323,183.2],[57.451674,13.595165,182.8],[57.45148,13.595034,182.8],[57.451268,13.594911,183.0],[57.451012,13.594849,183.6],[57.450821,13.594708,185.2],[57.45065,13.594489,186.4],[57.450423,13.594173,185.0],[57.450258,13.5944,185.0],[57.450124,13.594674,185.0],[57.449953,13.594995,185.0],[57.449773,13.595297,184.8],[57.449585,13.595336,185.0],[57.449386,13.595176,185.0],[57.448994,13.595134,185.2],[57.448661,13.596187,185.6],[57.448258,13.595916,186.0],[57.447816,13.595264,185.4],[57.447545,13.594692,184.2],[57.447112,13.594068,184.0],[57.446957,13.593521,183.0],[57.44674,13.592932,182.8],[57.446357,13.593031,184.2],[57.445804,13.593462,184.4],[57.445458,13.593683,185.2],[57.44492,13.594052,186.2],[57.444383,13.594431,187.0],[57.443956,13.594743,187.4],[57.443529,13.594975,187.4],[57.443224,13.595154,187.8]];
-    var RBU_DIST  = [0,37.4,57.8,96.7,133.3,190.4,247.1,300.4,359.8,414.5,455.1,502.9,540.6,587.6,615.8,653.0,692.8,751.2,795.3,849.7,883.3,926.0,955.2,976.2,1017.7,1058.0,1093.7,1108.5,1140.0,1181.0,1218.4,1254.3,1313.0,1356.7,1404.9,1455.3,1497.4,1553.5,1598.8,1643.8,1687.6,1728.2,1773.7,1819.6,1865.4,1918.2,1957.6,2011.1,2066.4,2122.7,2185.9,2238.0,2289.9,2323.1,2348.7,2358.3,2373.0,2387.1,2416.0,2431.5,2446.3,2465.5,2485.5,2503.4,2528.6,2540.0,2556.1,2588.6,2616.4,2649.1,2677.3,2699.3,2713.0,2730.3,2751.9,2767.3,2791.8,2814.4,2847.0,2874.4,2910.9,2958.9,3001.1,3046.2,3108.3,3154.4,3196.3,3231.4,3285.8,3347.1,3402.7,3445.3,3486.4,3527.6,3571.1,3621.1,3660.1,3710.2,3776.7,3814.9,3848.3,3895.7,3936.3,3975.8,4005.3,4041.2,4064.0,4110.8,4177.9,4215.4,4251.4,4299.3,4325.7,4388.5,4435.2,4484.6,4511.3,4569.6,4610.3,4657.6,4689.2,4741.2,4784.2,4836.4,4887.9,4948.7,4983.2,5048.9,5105.6,5139.4,5168.1,5188.2,5218.6,5241.2,5254.5,5273.7,5298.0,5330.3,5355.9,5372.9,5394.4,5425.6,5448.6,5473.3,5502.0,5524.8,5547.9,5579.4,5602.3,5624.4,5651.5,5678.4,5699.4,5723.6,5767.2,5840.3,5887.9,5950.7,5996.3,6057.2,6094.2,6136.9,6179.9,6246.6,6287.3,6351.0,6414.9,6465.9,6515.4,6550.97];
 
-    // ── State ─────────────────────────────────────────────────────────────────
-    var rbuMap = null;       // Leaflet map instance
-    var rbuDot = null;       // hover marker
-    var rbuMapReady = false; // Leaflet library loaded?
-    var rbuMapInit = false;  // map.fitBounds() done?
-
-    // ── Load Leaflet from CDN ─────────────────────────────────────────────────
-    // Loaded here (bottom of body) so DOM is ready, but map init is deferred
-    // until the Race page is actually shown (so the div has real dimensions).
-    (function () {
-      var s = document.createElement('script');
-      s.src = 'https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js';
-      s.onload = function () { rbuMapReady = true; };
-      s.onerror = function () { console.warn('Leaflet failed to load from jsdelivr'); };
-      document.head.appendChild(s);
-    })();
-
-    // ── Init map (called when Race page becomes visible) ──────────────────────
-    function rbuInitMap() {
-      if (rbuMapInit) {
-        // Already initialised — just force a resize in case container changed
-        rbuMap.invalidateSize();
-        return;
-      }
-      if (!rbuMapReady) {
-        // Library not loaded yet — retry in 100 ms
-        setTimeout(rbuInitMap, 100);
-        return;
-      }
-      rbuMapInit = true;
-
-      var latlngs = RBU_COORDS.map(function (c) { return [c[0], c[1]]; });
-
-      rbuMap = L.map('map', { zoomControl: true });
-
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-        maxZoom: 19,
-        subdomains: ['a','b','c']
-      }).addTo(rbuMap);
-
-      var poly = L.polyline(latlngs, { color: '#C8A84B', weight: 4, opacity: 0.95 }).addTo(rbuMap);
-      rbuMap.fitBounds(poly.getBounds(), { padding: [28, 28] });
-
-      var startIcon = L.divIcon({
-        html: '<div style="width:14px;height:14px;background:#C8A84B;border-radius:50%;border:2.5px solid #111;box-shadow:0 0 8px rgba(200,168,75,0.8)"></div>',
-        iconSize: [14, 14], iconAnchor: [7, 7], className: ''
-      });
-      L.marker([RBU_COORDS[0][0], RBU_COORDS[0][1]], { icon: startIcon })
-        .addTo(rbuMap)
-        .bindPopup('<b>Start / Mål</b>');
-
-      rbuDot = L.circleMarker([RBU_COORDS[0][0], RBU_COORDS[0][1]], {
-        radius: 6, color: '#C8A84B', fillColor: '#111',
-        fillOpacity: 0, opacity: 0, weight: 2
-      }).addTo(rbuMap);
-
-      rbuDrawElevation(null);
-      rbuBindElevation();
-    }
-
-    // ── Elevation chart ───────────────────────────────────────────────────────
-    function rbuDrawElevation(hi) {
-      var canvas = document.getElementById('elevation-chart');
-      if (!canvas || !canvas.offsetWidth) return;
-      var ctx = canvas.getContext('2d');
-      var dpr = window.devicePixelRatio || 1;
-      var cw = canvas.offsetWidth, ch = canvas.offsetHeight;
-      canvas.width = cw * dpr; canvas.height = ch * dpr;
-      ctx.scale(dpr, dpr);
-
-      var eles = RBU_COORDS.map(function (c) { return c[2]; });
-      var minE = Math.min.apply(null, eles) - 1;
-      var maxE = Math.max.apply(null, eles) + 1;
-      var maxD = RBU_DIST[RBU_DIST.length - 1];
-      var p = { l: 36, r: 8, t: 6, b: 20 };
-      var pw = cw - p.l - p.r, ph = ch - p.t - p.b;
-
-      ctx.fillStyle = '#252525'; ctx.fillRect(0, 0, cw, ch);
-
-      ctx.strokeStyle = 'rgba(255,255,255,0.04)'; ctx.lineWidth = 1;
-      for (var g = 0; g <= 3; g++) {
-        var gy = p.t + ph * g / 3;
-        ctx.beginPath(); ctx.moveTo(p.l, gy); ctx.lineTo(cw - p.r, gy); ctx.stroke();
-      }
-
-      var grad = ctx.createLinearGradient(0, p.t, 0, p.t + ph);
-      grad.addColorStop(0, 'rgba(155,59,26,0.55)');
-      grad.addColorStop(1, 'rgba(155,59,26,0.03)');
-      ctx.fillStyle = grad;
-      ctx.beginPath(); ctx.moveTo(p.l, p.t + ph);
-      for (var i = 0; i < RBU_COORDS.length; i++) {
-        var x = p.l + pw * RBU_DIST[i] / maxD;
-        var y = p.t + ph * (1 - (eles[i] - minE) / (maxE - minE));
-        i === 0 ? ctx.lineTo(x, y) : ctx.lineTo(x, y);
-      }
-      ctx.lineTo(p.l + pw, p.t + ph); ctx.closePath(); ctx.fill();
-
-      ctx.strokeStyle = '#C8A84B'; ctx.lineWidth = 1.5;
-      ctx.beginPath();
-      for (var i = 0; i < RBU_COORDS.length; i++) {
-        var x = p.l + pw * RBU_DIST[i] / maxD;
-        var y = p.t + ph * (1 - (eles[i] - minE) / (maxE - minE));
-        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-      }
-      ctx.stroke();
-
-      ctx.fillStyle = '#555'; ctx.font = '9px IBM Plex Mono,monospace'; ctx.textAlign = 'right';
-      for (var g = 0; g <= 3; g++) {
-        var val = maxE - (maxE - minE) * g / 3;
-        ctx.fillText(Math.round(val) + 'm', p.l - 3, p.t + ph * g / 3 + 3);
-      }
-      ctx.textAlign = 'center';
-      [0,1,2,3,4,5,6].forEach(function (km) {
-        var x = p.l + pw * (km * 1000) / maxD;
-        ctx.fillStyle = '#444';
-        ctx.beginPath(); ctx.moveTo(x, p.t + ph); ctx.lineTo(x, p.t + ph + 3); ctx.stroke();
-        ctx.fillStyle = '#555'; ctx.fillText(km + 'km', x, ch - 3);
-      });
-
-      if (hi !== null) {
-        var hx = p.l + pw * RBU_DIST[hi] / maxD;
-        var hy = p.t + ph * (1 - (eles[hi] - minE) / (maxE - minE));
-        ctx.strokeStyle = 'rgba(200,168,75,0.4)'; ctx.lineWidth = 1;
-        ctx.setLineDash([3, 3]);
-        ctx.beginPath(); ctx.moveTo(hx, p.t); ctx.lineTo(hx, p.t + ph); ctx.stroke();
-        ctx.setLineDash([]);
-        ctx.fillStyle = '#C8A84B';
-        ctx.beginPath(); ctx.arc(hx, hy, 3, 0, Math.PI * 2); ctx.fill();
-        var lx = hx + 6; if (lx + 68 > cw - p.r) lx = hx - 74;
-        ctx.fillStyle = 'rgba(15,15,15,0.88)';
-        ctx.fillRect(lx, hy - 10, 68, 16);
-        ctx.fillStyle = '#C8A84B'; ctx.font = '9px IBM Plex Mono,monospace'; ctx.textAlign = 'left';
-        ctx.fillText(Math.round(eles[hi]) + 'm  ' + (Math.round(RBU_DIST[hi] / 100) / 10).toFixed(1) + 'km', lx + 3, hy + 2);
-      }
-    }
-
-    var rbuElevBound = false;
-    function rbuBindElevation() {
-      if (rbuElevBound) return;
-      rbuElevBound = true;
-      var canvas = document.getElementById('elevation-chart');
-      if (!canvas) return;
-      canvas.addEventListener('mousemove', function (e) {
-        var rect = canvas.getBoundingClientRect();
-        var frac = Math.max(0, Math.min(1, (e.clientX - rect.left - 36) / (canvas.offsetWidth - 44)));
-        var target = frac * RBU_DIST[RBU_DIST.length - 1];
-        var best = 0;
-        for (var i = 0; i < RBU_DIST.length; i++) {
-          if (Math.abs(RBU_DIST[i] - target) < Math.abs(RBU_DIST[best] - target)) best = i;
-        }
-        rbuDrawElevation(best);
-        if (rbuDot) {
-          rbuDot.setLatLng([RBU_COORDS[best][0], RBU_COORDS[best][1]]);
-          rbuDot.setStyle({ opacity: 1, fillOpacity: 1 });
-        }
-      });
-      canvas.addEventListener('mouseleave', function () {
-        rbuDrawElevation(null);
-        if (rbuDot) rbuDot.setStyle({ opacity: 0, fillOpacity: 0 });
-      });
-      window.addEventListener('resize', function () { rbuDrawElevation(null); });
-    }
-    </script>
 
     <div style="margin-top:4rem">
       <div class="section-title">Regler</div>
@@ -924,12 +756,183 @@
       </div>
       <div style="display:flex;gap:0.75rem;align-items:center">
         <input type="text" id="db-search" placeholder="Sök namn, mejl..." oninput="renderCards()" style="background:var(--grime);border:1px solid #333;color:var(--pale);font-family:'IBM Plex Mono',monospace;font-size:0.75rem;padding:8px 12px;outline:none;width:200px">
+        <button onclick="openAddParticipant()" style="background:var(--rail);border:1px solid var(--rail);color:var(--coal);padding:8px 16px;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;transition:all 0.2s;font-weight:500" onmouseover="this.style.background='#a88a3b'" onmouseout="this.style.background='var(--rail)'">+ Lägg till</button>
         <button onclick="exportExcel()" style="background:none;border:1px solid var(--rail);color:var(--rail);padding:8px 16px;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;transition:all 0.2s" onmouseover="this.style.background='var(--rail)';this.style.color='var(--coal)'" onmouseout="this.style.background='none';this.style.color='var(--rail)'">Exportera Excel</button>
       </div>
     </div>
     <div id="cards-container" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem"></div>
   </div>
 </div>
+
+<script>
+    // ── GPX data ──────────────────────────────────────────────────────────────
+    var RBU_COORDS = [[57.443225,13.595225,186.2],[57.443542,13.595014,186.0],[57.443712,13.594887,186.2],[57.444038,13.594652,186.6],[57.444348,13.594447,187.2],[57.444832,13.594128,187.6],[57.445309,13.593794,188.0],[57.445756,13.593472,187.4],[57.446254,13.593111,187.6],[57.446729,13.592873,187.6],[57.446947,13.593417,187.0],[57.447129,13.59414,188.4],[57.447464,13.594042,188.2],[57.447769,13.593497,188.2],[57.447909,13.593105,188.0],[57.448207,13.592822,190.2],[57.448536,13.592561,192.2],[57.449025,13.592204,192.6],[57.449402,13.591971,193.4],[57.449855,13.591628,193.2],[57.450137,13.591427,191.6],[57.450519,13.591355,190.8],[57.45077,13.591211,192.4],[57.450954,13.591137,193.8],[57.45132,13.590998,194.2],[57.451671,13.590827,191.6],[57.451893,13.591256,190.0],[57.452017,13.591163,192.4],[57.452277,13.590956,192.2],[57.452589,13.591322,192.6],[57.452909,13.591132,193.4],[57.453045,13.590586,191.8],[57.4533,13.589727,191.8],[57.453641,13.589365,194.4],[57.454016,13.588961,195.4],[57.45444,13.588665,195.8],[57.454816,13.588571,192.6],[57.455302,13.588821,193.0],[57.455699,13.588649,193.6],[57.456042,13.588252,193.8],[57.456262,13.587644,197.0],[57.456571,13.587284,195.6],[57.456958,13.587034,193.8],[57.457343,13.586758,193.6],[57.457746,13.586601,193.8],[57.458202,13.586356,193.8],[57.458502,13.586005,194.0],[57.458939,13.585629,194.0],[57.459362,13.586114,192.8],[57.459435,13.587045,193.0],[57.459338,13.588087,192.8],[57.459229,13.588934,192.2],[57.459346,13.589774,192.6],[57.459583,13.590111,191.6],[57.459813,13.590093,192.0],[57.459897,13.590056,190.8],[57.460029,13.590073,190.0],[57.460155,13.5901,190.4],[57.460415,13.590076,189.6],[57.460543,13.589975,188.8],[57.460676,13.589969,189.2],[57.460765,13.590244,189.2],[57.460854,13.590535,189.4],[57.460931,13.590798,189.6],[57.461118,13.591035,189.0],[57.461209,13.591123,189.0],[57.461302,13.59133,189.0],[57.461561,13.59158,189.6],[57.461747,13.591892,190.2],[57.462015,13.592117,190.6],[57.462185,13.592466,191.6],[57.462324,13.592729,192.0],[57.462396,13.592915,190.6],[57.462433,13.593195,189.4],[57.4624,13.593551,189.4],[57.462351,13.593792,188.6],[57.462276,13.594177,188.6],[57.462095,13.594349,190.0],[57.461802,13.594382,189.2],[57.461572,13.594546,189.0],[57.461272,13.594792,188.8],[57.460865,13.594521,188.8],[57.460496,13.594356,186.6],[57.46015,13.593963,185.6],[57.459717,13.593309,186.2],[57.459384,13.59285,186.2],[57.459014,13.592714,187.4],[57.458709,13.592868,189.4],[57.458295,13.592385,189.0],[57.45778,13.592021,189.2],[57.457316,13.591672,189.6],[57.457068,13.591129,188.8],[57.456816,13.590627,187.4],[57.456558,13.590132,187.8],[57.456289,13.589605,188.8],[57.455903,13.589177,189.0],[57.455553,13.589126,189.2],[57.455106,13.589238,187.6],[57.454509,13.589295,186.4],[57.45417,13.589399,186.2],[57.45387,13.589372,189.8],[57.453468,13.589637,188.8],[57.453151,13.589974,186.0],[57.453152,13.590633,185.4],[57.453279,13.591066,188.6],[57.453492,13.591518,188.4],[57.453665,13.591723,187.6],[57.454034,13.592099,187.0],[57.454367,13.593034,188.0],[57.45448,13.593624,187.0],[57.454646,13.594142,187.4],[57.454993,13.594615,187.2],[57.455192,13.594855,185.2],[57.455686,13.595366,185.6],[57.456082,13.595627,187.8],[57.456365,13.594992,184.6],[57.456605,13.59502,183.4],[57.456362,13.595884,185.2],[57.456281,13.596547,185.6],[57.456024,13.597177,185.0],[57.455745,13.597282,186.8],[57.455457,13.597966,185.8],[57.455137,13.598369,185.6],[57.454731,13.597929,185.8],[57.454314,13.597554,185.8],[57.453983,13.598362,185.6],[57.453711,13.598086,185.8],[57.453914,13.597054,186.8],[57.454164,13.596228,187.0],[57.454046,13.595706,186.8],[57.453797,13.595586,186.0],[57.45362,13.595513,186.0],[57.453362,13.595343,185.2],[57.453164,13.59526,184.8],[57.453049,13.5952,184.6],[57.452886,13.595096,184.4],[57.45267,13.595028,184.0],[57.452495,13.595459,183.6],[57.452269,13.595534,183.4],[57.452125,13.595434,183.4],[57.451942,13.595323,183.2],[57.451674,13.595165,182.8],[57.45148,13.595034,182.8],[57.451268,13.594911,183.0],[57.451012,13.594849,183.6],[57.450821,13.594708,185.2],[57.45065,13.594489,186.4],[57.450423,13.594173,185.0],[57.450258,13.5944,185.0],[57.450124,13.594674,185.0],[57.449953,13.594995,185.0],[57.449773,13.595297,184.8],[57.449585,13.595336,185.0],[57.449386,13.595176,185.0],[57.448994,13.595134,185.2],[57.448661,13.596187,185.6],[57.448258,13.595916,186.0],[57.447816,13.595264,185.4],[57.447545,13.594692,184.2],[57.447112,13.594068,184.0],[57.446957,13.593521,183.0],[57.44674,13.592932,182.8],[57.446357,13.593031,184.2],[57.445804,13.593462,184.4],[57.445458,13.593683,185.2],[57.44492,13.594052,186.2],[57.444383,13.594431,187.0],[57.443956,13.594743,187.4],[57.443529,13.594975,187.4],[57.443224,13.595154,187.8]];
+    var RBU_DIST  = [0,37.4,57.8,96.7,133.3,190.4,247.1,300.4,359.8,414.5,455.1,502.9,540.6,587.6,615.8,653.0,692.8,751.2,795.3,849.7,883.3,926.0,955.2,976.2,1017.7,1058.0,1093.7,1108.5,1140.0,1181.0,1218.4,1254.3,1313.0,1356.7,1404.9,1455.3,1497.4,1553.5,1598.8,1643.8,1687.6,1728.2,1773.7,1819.6,1865.4,1918.2,1957.6,2011.1,2066.4,2122.7,2185.9,2238.0,2289.9,2323.1,2348.7,2358.3,2373.0,2387.1,2416.0,2431.5,2446.3,2465.5,2485.5,2503.4,2528.6,2540.0,2556.1,2588.6,2616.4,2649.1,2677.3,2699.3,2713.0,2730.3,2751.9,2767.3,2791.8,2814.4,2847.0,2874.4,2910.9,2958.9,3001.1,3046.2,3108.3,3154.4,3196.3,3231.4,3285.8,3347.1,3402.7,3445.3,3486.4,3527.6,3571.1,3621.1,3660.1,3710.2,3776.7,3814.9,3848.3,3895.7,3936.3,3975.8,4005.3,4041.2,4064.0,4110.8,4177.9,4215.4,4251.4,4299.3,4325.7,4388.5,4435.2,4484.6,4511.3,4569.6,4610.3,4657.6,4689.2,4741.2,4784.2,4836.4,4887.9,4948.7,4983.2,5048.9,5105.6,5139.4,5168.1,5188.2,5218.6,5241.2,5254.5,5273.7,5298.0,5330.3,5355.9,5372.9,5394.4,5425.6,5448.6,5473.3,5502.0,5524.8,5547.9,5579.4,5602.3,5624.4,5651.5,5678.4,5699.4,5723.6,5767.2,5840.3,5887.9,5950.7,5996.3,6057.2,6094.2,6136.9,6179.9,6246.6,6287.3,6351.0,6414.9,6465.9,6515.4,6550.97];
+
+    // ── State ─────────────────────────────────────────────────────────────────
+    var rbuMap = null;       // Leaflet map instance
+    var rbuDot = null;       // hover marker
+    var rbuMapReady = false; // Leaflet library loaded?
+    var rbuMapInit = false;  // map.fitBounds() done?
+
+    // ── Load Leaflet from CDN ─────────────────────────────────────────────────
+    // Loaded here (bottom of body) so DOM is ready, but map init is deferred
+    // until the Race page is actually shown (so the div has real dimensions).
+    (function () {
+      var s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js';
+      s.onload = function () { rbuMapReady = true; };
+      s.onerror = function () { console.warn('Leaflet failed to load from jsdelivr'); };
+      document.head.appendChild(s);
+    })();
+
+    // ── Init map (called when Race page becomes visible) ──────────────────────
+    function rbuInitMap() {
+      if (rbuMapInit) {
+        // Already initialised — just force a resize in case container changed
+        rbuMap.invalidateSize();
+        return;
+      }
+      if (!rbuMapReady) {
+        // Library not loaded yet — retry in 100 ms
+        setTimeout(rbuInitMap, 100);
+        return;
+      }
+      rbuMapInit = true;
+
+      var latlngs = RBU_COORDS.map(function (c) { return [c[0], c[1]]; });
+
+      rbuMap = L.map('map', { zoomControl: true });
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        maxZoom: 19,
+        subdomains: ['a','b','c']
+      }).addTo(rbuMap);
+
+      var poly = L.polyline(latlngs, { color: '#C8A84B', weight: 4, opacity: 0.95 }).addTo(rbuMap);
+      rbuMap.fitBounds(poly.getBounds(), { padding: [28, 28] });
+
+      var startIcon = L.divIcon({
+        html: '<div style="width:14px;height:14px;background:#C8A84B;border-radius:50%;border:2.5px solid #111;box-shadow:0 0 8px rgba(200,168,75,0.8)"></div>',
+        iconSize: [14, 14], iconAnchor: [7, 7], className: ''
+      });
+      L.marker([RBU_COORDS[0][0], RBU_COORDS[0][1]], { icon: startIcon })
+        .addTo(rbuMap)
+        .bindPopup('<b>Start / Mål</b>');
+
+      rbuDot = L.circleMarker([RBU_COORDS[0][0], RBU_COORDS[0][1]], {
+        radius: 6, color: '#C8A84B', fillColor: '#111',
+        fillOpacity: 0, opacity: 0, weight: 2
+      }).addTo(rbuMap);
+
+      rbuDrawElevation(null);
+      rbuBindElevation();
+    }
+
+    // ── Elevation chart ───────────────────────────────────────────────────────
+    function rbuDrawElevation(hi) {
+      var canvas = document.getElementById('elevation-chart');
+      if (!canvas || !canvas.offsetWidth) return;
+      var ctx = canvas.getContext('2d');
+      var dpr = window.devicePixelRatio || 1;
+      var cw = canvas.offsetWidth, ch = canvas.offsetHeight;
+      canvas.width = cw * dpr; canvas.height = ch * dpr;
+      ctx.scale(dpr, dpr);
+
+      var eles = RBU_COORDS.map(function (c) { return c[2]; });
+      var minE = Math.min.apply(null, eles) - 1;
+      var maxE = Math.max.apply(null, eles) + 1;
+      var maxD = RBU_DIST[RBU_DIST.length - 1];
+      var p = { l: 36, r: 8, t: 6, b: 20 };
+      var pw = cw - p.l - p.r, ph = ch - p.t - p.b;
+
+      ctx.fillStyle = '#252525'; ctx.fillRect(0, 0, cw, ch);
+
+      ctx.strokeStyle = 'rgba(255,255,255,0.04)'; ctx.lineWidth = 1;
+      for (var g = 0; g <= 3; g++) {
+        var gy = p.t + ph * g / 3;
+        ctx.beginPath(); ctx.moveTo(p.l, gy); ctx.lineTo(cw - p.r, gy); ctx.stroke();
+      }
+
+      var grad = ctx.createLinearGradient(0, p.t, 0, p.t + ph);
+      grad.addColorStop(0, 'rgba(155,59,26,0.55)');
+      grad.addColorStop(1, 'rgba(155,59,26,0.03)');
+      ctx.fillStyle = grad;
+      ctx.beginPath(); ctx.moveTo(p.l, p.t + ph);
+      for (var i = 0; i < RBU_COORDS.length; i++) {
+        var x = p.l + pw * RBU_DIST[i] / maxD;
+        var y = p.t + ph * (1 - (eles[i] - minE) / (maxE - minE));
+        i === 0 ? ctx.lineTo(x, y) : ctx.lineTo(x, y);
+      }
+      ctx.lineTo(p.l + pw, p.t + ph); ctx.closePath(); ctx.fill();
+
+      ctx.strokeStyle = '#C8A84B'; ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      for (var i = 0; i < RBU_COORDS.length; i++) {
+        var x = p.l + pw * RBU_DIST[i] / maxD;
+        var y = p.t + ph * (1 - (eles[i] - minE) / (maxE - minE));
+        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      ctx.fillStyle = '#555'; ctx.font = '9px IBM Plex Mono,monospace'; ctx.textAlign = 'right';
+      for (var g = 0; g <= 3; g++) {
+        var val = maxE - (maxE - minE) * g / 3;
+        ctx.fillText(Math.round(val) + 'm', p.l - 3, p.t + ph * g / 3 + 3);
+      }
+      ctx.textAlign = 'center';
+      [0,1,2,3,4,5,6].forEach(function (km) {
+        var x = p.l + pw * (km * 1000) / maxD;
+        ctx.fillStyle = '#444';
+        ctx.beginPath(); ctx.moveTo(x, p.t + ph); ctx.lineTo(x, p.t + ph + 3); ctx.stroke();
+        ctx.fillStyle = '#555'; ctx.fillText(km + 'km', x, ch - 3);
+      });
+
+      if (hi !== null) {
+        var hx = p.l + pw * RBU_DIST[hi] / maxD;
+        var hy = p.t + ph * (1 - (eles[hi] - minE) / (maxE - minE));
+        ctx.strokeStyle = 'rgba(200,168,75,0.4)'; ctx.lineWidth = 1;
+        ctx.setLineDash([3, 3]);
+        ctx.beginPath(); ctx.moveTo(hx, p.t); ctx.lineTo(hx, p.t + ph); ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = '#C8A84B';
+        ctx.beginPath(); ctx.arc(hx, hy, 3, 0, Math.PI * 2); ctx.fill();
+        var lx = hx + 6; if (lx + 68 > cw - p.r) lx = hx - 74;
+        ctx.fillStyle = 'rgba(15,15,15,0.88)';
+        ctx.fillRect(lx, hy - 10, 68, 16);
+        ctx.fillStyle = '#C8A84B'; ctx.font = '9px IBM Plex Mono,monospace'; ctx.textAlign = 'left';
+        ctx.fillText(Math.round(eles[hi]) + 'm  ' + (Math.round(RBU_DIST[hi] / 100) / 10).toFixed(1) + 'km', lx + 3, hy + 2);
+      }
+    }
+
+    var rbuElevBound = false;
+    function rbuBindElevation() {
+      if (rbuElevBound) return;
+      rbuElevBound = true;
+      var canvas = document.getElementById('elevation-chart');
+      if (!canvas) return;
+      canvas.addEventListener('mousemove', function (e) {
+        var rect = canvas.getBoundingClientRect();
+        var frac = Math.max(0, Math.min(1, (e.clientX - rect.left - 36) / (canvas.offsetWidth - 44)));
+        var target = frac * RBU_DIST[RBU_DIST.length - 1];
+        var best = 0;
+        for (var i = 0; i < RBU_DIST.length; i++) {
+          if (Math.abs(RBU_DIST[i] - target) < Math.abs(RBU_DIST[best] - target)) best = i;
+        }
+        rbuDrawElevation(best);
+        if (rbuDot) {
+          rbuDot.setLatLng([RBU_COORDS[best][0], RBU_COORDS[best][1]]);
+          rbuDot.setStyle({ opacity: 1, fillOpacity: 1 });
+        }
+      });
+      canvas.addEventListener('mouseleave', function () {
+        rbuDrawElevation(null);
+        if (rbuDot) rbuDot.setStyle({ opacity: 0, fillOpacity: 0 });
+      });
+      window.addEventListener('resize', function () { rbuDrawElevation(null); });
+    }
+    </script>
 
 <script>
 // ===== STATE =====
@@ -1254,6 +1257,61 @@ function exportExcel() {
   a.download = 'railway-deltagare-' + new Date().toISOString().slice(0,10) + '.xls';
   a.click();
 }
+
+// ===== MANUAL ADD PARTICIPANT =====
+function openAddParticipant() {
+  ['add-firstName','add-lastName','add-email','add-phone','add-dietary','add-message'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('add-participant-error').style.display = 'none';
+  document.getElementById('add-participant-overlay').style.display = 'flex';
+}
+
+function closeAddParticipant() {
+  document.getElementById('add-participant-overlay').style.display = 'none';
+}
+
+function saveAddParticipant() {
+  const firstName = document.getElementById('add-firstName').value.trim();
+  const lastName  = document.getElementById('add-lastName').value.trim();
+  const email     = document.getElementById('add-email').value.trim();
+  const phone     = document.getElementById('add-phone').value.trim();
+  const dietary   = document.getElementById('add-dietary').value.trim();
+  const message   = document.getElementById('add-message').value.trim();
+  const errEl     = document.getElementById('add-participant-error');
+
+  errEl.style.display = 'none';
+  if (!firstName || !lastName || !email) {
+    errEl.textContent = 'Fyll i förnamn, efternamn och e-post.';
+    errEl.style.display = 'block';
+    return;
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    errEl.textContent = 'Ange en giltig e-postadress.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  const reg = {
+    id: Date.now(),
+    date: new Date().toISOString(),
+    firstName, lastName, email, phone, dietary, message,
+    manuallyAdded: true
+  };
+
+  const regs = getData('registrations', []);
+  regs.push(reg);
+  setData('registrations', regs);
+
+  closeAddParticipant();
+  renderCards();
+  updateStats();
+}
+
+// Close add modal on overlay click
+document.addEventListener('click', function(e) {
+  if (e.target.id === 'add-participant-overlay') closeAddParticipant();
+});
 </script>
 
 <!-- EDIT MODAL -->
@@ -1303,6 +1361,49 @@ function exportExcel() {
       <div style="display:flex;gap:0.75rem">
         <button onclick="saveEdit()" style="flex:1;padding:12px;background:var(--rail);color:var(--coal);border:none;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:0.72rem;letter-spacing:2px;text-transform:uppercase;font-weight:500;transition:background 0.2s">Spara ändringar</button>
         <button onclick="closeEdit()" style="padding:12px 20px;background:none;border:1px solid #333;color:var(--ash);cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:0.72rem;letter-spacing:2px;text-transform:uppercase;transition:all 0.2s">Avbryt</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADD PARTICIPANT MODAL -->
+<div id="add-participant-overlay" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.75);align-items:center;justify-content:center;padding:1rem">
+  <div style="background:var(--soot);border:1px solid #333;width:100%;max-width:480px;max-height:90vh;overflow-y:auto">
+    <div style="background:var(--grime);border-bottom:1px solid #2a2a2a;padding:1rem 1.25rem;display:flex;justify-content:space-between;align-items:center">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:2px;color:var(--white)">Lägg till deltagare</div>
+      <button onclick="closeAddParticipant()" style="background:none;border:none;color:var(--ash);cursor:pointer;font-size:1.2rem;padding:0 4px;line-height:1">&times;</button>
+    </div>
+    <div style="padding:1.5rem">
+      <div id="add-participant-error" class="alert alert-error" style="display:none;margin-bottom:1rem"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem">
+        <div>
+          <label style="display:block;font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--ash);margin-bottom:0.4rem">Förnamn <span style="color:var(--rail)">*</span></label>
+          <input id="add-firstName" type="text" placeholder="Förnamn" style="width:100%;padding:10px 12px;background:var(--grime);border:1px solid #333;color:var(--pale);font-family:'IBM Plex Sans',sans-serif;font-size:0.85rem;outline:none">
+        </div>
+        <div>
+          <label style="display:block;font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--ash);margin-bottom:0.4rem">Efternamn <span style="color:var(--rail)">*</span></label>
+          <input id="add-lastName" type="text" placeholder="Efternamn" style="width:100%;padding:10px 12px;background:var(--grime);border:1px solid #333;color:var(--pale);font-family:'IBM Plex Sans',sans-serif;font-size:0.85rem;outline:none">
+        </div>
+      </div>
+      <div style="margin-bottom:1rem">
+        <label style="display:block;font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--ash);margin-bottom:0.4rem">E-post <span style="color:var(--rail)">*</span></label>
+        <input id="add-email" type="email" placeholder="email@exempel.se" style="width:100%;padding:10px 12px;background:var(--grime);border:1px solid #333;color:var(--pale);font-family:'IBM Plex Sans',sans-serif;font-size:0.85rem;outline:none">
+      </div>
+      <div style="margin-bottom:1rem">
+        <label style="display:block;font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--ash);margin-bottom:0.4rem">Telefon</label>
+        <input id="add-phone" type="tel" placeholder="+46 70 000 00 00" style="width:100%;padding:10px 12px;background:var(--grime);border:1px solid #333;color:var(--pale);font-family:'IBM Plex Sans',sans-serif;font-size:0.85rem;outline:none">
+      </div>
+      <div style="margin-bottom:1rem">
+        <label style="display:block;font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--ash);margin-bottom:0.4rem">Specialkost</label>
+        <input id="add-dietary" type="text" placeholder="T.ex. glutenfri, vegan..." style="width:100%;padding:10px 12px;background:var(--grime);border:1px solid #333;color:var(--pale);font-family:'IBM Plex Sans',sans-serif;font-size:0.85rem;outline:none">
+      </div>
+      <div style="margin-bottom:1.5rem">
+        <label style="display:block;font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--ash);margin-bottom:0.4rem">Anteckningar</label>
+        <textarea id="add-message" rows="3" placeholder="Valfria anteckningar..." style="width:100%;padding:10px 12px;background:var(--grime);border:1px solid #333;color:var(--pale);font-family:'IBM Plex Sans',sans-serif;font-size:0.85rem;outline:none;resize:vertical"></textarea>
+      </div>
+      <div style="display:flex;gap:0.75rem">
+        <button onclick="saveAddParticipant()" style="flex:1;padding:12px;background:var(--rail);color:var(--coal);border:none;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:0.72rem;letter-spacing:2px;text-transform:uppercase;font-weight:500;transition:background 0.2s">Lägg till deltagare</button>
+        <button onclick="closeAddParticipant()" style="padding:12px 20px;background:none;border:1px solid #333;color:var(--ash);cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:0.72rem;letter-spacing:2px;text-transform:uppercase;transition:all 0.2s">Avbryt</button>
       </div>
     </div>
   </div>
